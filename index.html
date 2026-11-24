@@ -1,0 +1,3191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>La Elfa Cris - Polo Norte 2026 (v16.6 Maestra)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;800&family=Great+Vibes&family=Montserrat:wght@400;600;800&family=Mountains+of+Christmas:wght@700&family=Pacifico&family=Playfair+Display:ital,wght@0,600;0,800;1,600&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-main: #0f291e;
+      --bg-card: #163829;
+      --primary: #b91c1c;
+      --gold: #f59e0b;
+      --gold-light: #fde68a;
+      --text-main: #fefce8;
+      --text-muted: #d1fae5;
+      --border-soft: rgba(245, 158, 11, 0.35);
+      --font-title: 'Mountains of Christmas', cursive;
+      --font-body: 'Poppins', sans-serif;
+      --size-block-title: 22px;
+      --size-body: 15px;
+      --radius: 16px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body {
+      font-family: var(--font-body);
+      font-size: var(--size-body);
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-bottom: 86px;
+      background-image:
+        radial-gradient(circle at 15% 15%, rgba(185, 28, 28, 0.22) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(245, 158, 11, 0.16) 0%, transparent 50%);
+    }
+
+    .hidden { display: none !important; }
+
+    /* Partículas dinámicas */
+    #particles-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+      overflow: hidden;
+    }
+    .falling-particle {
+      position: absolute;
+      top: -48px;
+      user-select: none;
+      pointer-events: none;
+      animation: particleFall linear infinite;
+      will-change: transform;
+    }
+    @keyframes particleFall {
+      0% { transform: translateY(-40px) rotate(0deg); opacity: 0.95; }
+      100% { transform: translateY(110vh) rotate(360deg); opacity: 0.35; }
+    }
+
+    /* Toast flotante */
+    #toast-box {
+      position: fixed;
+      bottom: 88px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      color: #fef3c7;
+      border: 2px solid var(--gold);
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      z-index: 10000;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.55);
+      text-align: center;
+      max-width: 92vw;
+    }
+
+    /* ==================== PANTALLA DE ACCESO Y PRE-ENTREGA ==================== */
+    #auth-screen {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px 16px;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+    }
+
+    .elfa-avatar-ring {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      border: 4px solid var(--gold);
+      box-shadow: 0 0 28px rgba(245, 158, 11, 0.55), inset 0 0 12px rgba(0,0,0,0.4);
+      overflow: hidden;
+      margin: 0 auto 16px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #991b1b, #14532d);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.2s ease;
+    }
+    .elfa-avatar-ring:active { transform: scale(0.95); }
+    .elfa-avatar-ring img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    .pre-countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      max-width: 380px;
+      width: 100%;
+      margin: 18px auto;
+    }
+    .pre-cd-box {
+      background: rgba(0, 0, 0, 0.42);
+      border: 2px solid var(--gold);
+      border-radius: 14px;
+      padding: 12px 6px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.35);
+    }
+    .pre-cd-num {
+      display: block;
+      font-size: 26px;
+      font-weight: 800;
+      color: var(--gold-light);
+      line-height: 1.1;
+    }
+    .pre-cd-lbl {
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.85;
+    }
+
+    .pin-panel {
+      background: rgba(15, 35, 26, 0.92);
+      border: 2px solid var(--gold);
+      border-radius: 22px;
+      padding: 20px;
+      width: 100%;
+      max-width: 340px;
+      box-shadow: 0 16px 38px rgba(0,0,0,0.5);
+      margin-top: 10px;
+    }
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin: 14px 0 18px;
+    }
+    .pin-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: transparent;
+      transition: background 0.15s, transform 0.15s;
+    }
+    .pin-dot.filled {
+      background: var(--gold);
+      transform: scale(1.15);
+      box-shadow: 0 0 10px var(--gold);
+    }
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .key-btn {
+      background: linear-gradient(180deg, #1f4d39, #133124);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fff;
+      font-size: 20px;
+      font-weight: 700;
+      padding: 14px 0;
+      border-radius: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 0 #091a12;
+    }
+    .key-btn:active { transform: translateY(2px); box-shadow: 0 2px 0 #091a12; }
+    .key-btn.key-ok { background: linear-gradient(180deg, #dc2626, #991b1b); border-color: #fca5a5; }
+    .key-btn.key-del { background: linear-gradient(180deg, #4b5563, #374151); font-size: 15px; }
+
+    /* ==================== BARRA SUPERIOR ADMIN / SIMULADOR ==================== */
+    #elf-top-bar {
+      background: linear-gradient(90deg, #7f1d1d, #b45309, #14532d);
+      border-bottom: 2px solid var(--gold);
+      padding: 8px 12px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.45);
+    }
+    .sim-banner {
+      background: #f59e0b;
+      color: #111827;
+      padding: 8px 14px;
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      position: sticky;
+      top: 0;
+      z-index: 950;
+    }
+
+    /* ==================== CABECERA PARTICIPANTE EDITABLE ==================== */
+    #app-header {
+      position: relative;
+      padding: 22px 16px;
+      text-align: center;
+      border-bottom: 3px solid var(--gold);
+      background: linear-gradient(135deg, #881337 0%, #14532d 100%);
+      background-size: cover;
+      background-position: center;
+      overflow: hidden;
+    }
+    #app-header-overlay { position: relative; z-index: 2; }
+    #app-header.mode-bg::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.45);
+      z-index: 1;
+    }
+    .header-media-banner {
+      max-width: 100%;
+      max-height: 170px;
+      border-radius: 14px;
+      border: 2px solid var(--gold);
+      margin-bottom: 10px;
+      object-fit: cover;
+    }
+    .header-media-emblem {
+      width: 84px;
+      height: 84px;
+      border-radius: 50%;
+      border: 3px solid var(--gold);
+      margin: 0 auto 10px;
+      display: block;
+      object-fit: cover;
+    }
+    #btn-toggle-user-fx {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 5;
+      background: rgba(0, 0, 0, 0.58);
+      border: 1px solid var(--gold);
+      color: var(--gold-light);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      cursor: pointer;
+    }
+
+    /* ==================== CONTENEDORES Y TARJETAS ==================== */
+    .container { max-width: 840px; margin: 0 auto; padding: 16px; }
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius);
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.28);
+      position: relative;
+      overflow: hidden;
+    }
+    .card-title {
+      font-family: var(--font-title);
+      font-size: var(--size-block-title);
+      color: var(--gold-light);
+      margin-bottom: 8px;
+      line-height: 1.2;
+    }
+
+    .gold-card {
+      background: linear-gradient(145deg, #451a03 0%, #78350f 45%, #92400e 100%) !important;
+      border: 2px solid #fbbf24 !important;
+      box-shadow: 0 10px 28px rgba(245, 158, 11, 0.35), inset 0 0 20px rgba(253, 230, 138, 0.18) !important;
+    }
+    .gold-card .card-title {
+      color: #fef08a !important;
+      text-shadow: 0 2px 6px rgba(0,0,0,0.55);
+    }
+
+    /* Capa dorada translúcida con regalo (Estado Próximamente) */
+    .soon-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(245, 158, 11, 0.8), rgba(180, 83, 9, 0.88));
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 20px;
+      z-index: 20;
+      border-radius: var(--radius);
+    }
+    .soon-gift-badge {
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef3c7, #f59e0b);
+      border: 3px solid #fffbeb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+      margin-bottom: 10px;
+      animation: pulseGift 2.2s infinite ease-in-out;
+    }
+    @keyframes pulseGift {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.08); }
+    }
+
+    .block-cd-bar {
+      background: rgba(0,0,0,0.38);
+      border: 1px solid var(--gold);
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin: 10px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--gold-light);
+    }
+
+    /* Botones e Inputs */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 16px;
+      border-radius: 12px;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s, opacity 0.15s;
+      text-decoration: none;
+    }
+    .btn:active { transform: scale(0.97); }
+    .btn-sm { padding: 6px 11px; font-size: 12px; border-radius: 9px; }
+    .btn-xs { padding: 4px 8px; font-size: 11px; border-radius: 7px; }
+    .btn-block { width: 100%; }
+    .btn-primary { background: linear-gradient(180deg, #dc2626, #991b1b); color: #fff; border: 1px solid #fca5a5; }
+    .btn-gold { background: linear-gradient(180deg, #fbbf24, #d97706); color: #111827; border: 1px solid #fef3c7; }
+    .btn-green { background: linear-gradient(180deg, #16a34a, #15803d); color: #fff; border: 1px solid #86efac; }
+    .btn-wa { background: linear-gradient(180deg, #22c55e, #15803d); color: #fff; border: 1px solid #bbf7d0; }
+    .btn-outline { background: rgba(255,255,255,0.06); color: var(--text-main); border: 1px solid var(--border-soft); }
+    .btn-danger { background: #7f1d1d; color: #fecaca; border: 1px solid #ef4444; }
+
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 4px;
+      margin-top: 10px;
+    }
+    input[type="text"], input[type="number"], input[type="tel"], input[type="datetime-local"], input[type="url"], select, textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      background: rgba(8, 22, 16, 0.78);
+      color: #fff;
+      font-family: inherit;
+      font-size: 14px;
+    }
+    input[type="color"] {
+      width: 100%;
+      height: 38px;
+      border: 1px solid var(--border-soft);
+      border-radius: 8px;
+      background: transparent;
+      cursor: pointer;
+    }
+    textarea { resize: vertical; min-height: 70px; }
+
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    @media (max-width: 600px) {
+      .grid-3, .grid-4 { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .switch-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(0,0,0,0.25);
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-top: 8px;
+      gap: 10px;
+    }
+    .switch-row input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      accent-color: var(--gold);
+      cursor: pointer;
+    }
+
+    /* Navegación Inferior Participante */
+    #bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(10, 26, 19, 0.96);
+      border-top: 2px solid var(--gold);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 6px;
+      z-index: 850;
+      backdrop-filter: blur(8px);
+    }
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      padding: 6px 14px;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    .nav-btn.active {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--gold-light);
+    }
+
+    /* Pestañas Panel Maestro Admin (7 módulos) */
+    .admin-tabs-bar {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+      margin-bottom: 14px;
+      scrollbar-width: thin;
+    }
+    .admin-tab-btn {
+      white-space: nowrap;
+      padding: 9px 13px;
+      border-radius: 11px;
+      border: 1px solid var(--border-soft);
+      background: rgba(0,0,0,0.35);
+      color: var(--text-muted);
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .admin-tab-btn.active {
+      background: linear-gradient(180deg, #fbbf24, #d97706);
+      color: #111827;
+      border-color: #fef3c7;
+    }
+
+    /* Tabla Matriz Ultraligera */
+    .matrix-wrap {
+      overflow-x: auto;
+      border-radius: 12px;
+      border: 1px solid var(--border-soft);
+      margin-top: 10px;
+    }
+    .matrix-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      min-width: 720px;
+    }
+    .matrix-table th, .matrix-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      border-right: 1px solid rgba(255,255,255,0.06);
+      text-align: left;
+      vertical-align: middle;
+    }
+    .matrix-table th {
+      background: rgba(0,0,0,0.48);
+      color: var(--gold-light);
+      font-weight: 800;
+      position: sticky;
+      top: 0;
+    }
+    .status-pill {
+      display: inline-block;
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .st-online { background: rgba(22, 163, 74, 0.28); color: #86efac; border: 1px solid #22c55e; }
+    .st-offline { background: rgba(107, 114, 128, 0.28); color: #d1d5db; border: 1px solid #6b7280; }
+    .st-done { background: rgba(22, 163, 74, 0.34); color: #bbf7d0; border: 1px solid rgba(34, 197, 94, 0.5); }
+    .st-fail { background: rgba(220, 38, 38, 0.35); color: #fecaca; border: 1px solid rgba(239, 68, 68, 0.5); }
+    .st-seen { background: rgba(59, 130, 246, 0.3); color: #bfdbfe; }
+    .st-wait { background: rgba(255, 255, 255, 0.08); color: #9ca3af; }
+
+    /* Alerta Anti-Spoiler */
+    .spoiler-banner {
+      background: #991b1b;
+      color: #fef2f2;
+      border: 2px solid #f87171;
+      padding: 8px 10px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    /* Escáner QR Modal */
+    #qr-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.86);
+      z-index: 2000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .qr-modal-box {
+      background: var(--bg-card);
+      border: 2px solid var(--gold);
+      border-radius: 20px;
+      padding: 18px;
+      width: 100%;
+      max-width: 380px;
+      text-align: center;
+    }
+    #qr-reader { width: 100%; border-radius: 12px; overflow: hidden; margin: 10px 0; }
+
+    /* Canvas Previsualización Tarjetas PDF */
+    #card-preview-canvas {
+      width: 100%;
+      max-width: 460px;
+      height: auto;
+      border-radius: 12px;
+      border: 2px solid var(--gold);
+      background: #fff;
+      display: block;
+      margin: 12px auto;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.45);
+    }
+
+    .video-wrap {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+      border-radius: 12px;
+      margin: 10px 0;
+      border: 1px solid var(--border-soft);
+    }
+    .video-wrap iframe {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%; border: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="particles-canvas"></div>
+  <div id="toast-box" class="hidden"></div>
+
+  <!-- ==================== 1. PANTALLA DE ACCESO / PRE-ENTREGA ==================== -->
+  <section id="auth-screen">
+    <div id="pre-top-banner-wrap" class="hidden" style="margin-bottom:12px;">
+      <img id="pre-top-banner-img" src="" alt="Banner" style="max-width:320px;max-height:110px;border-radius:14px;border:2px solid var(--gold);">
+    </div>
+
+    <!-- Retrato circular de La Elfa Cris (Doble clic abre acceso secreto de Elfos) -->
+    <div id="elfa-portrait-btn" class="elfa-avatar-ring" title="La Elfa Cris">
+      <img id="elfa-portrait-img" src="" alt="La Elfa Cris">
+    </div>
+
+    <h1 id="pre-title-el" style="font-family:var(--font-title);font-size:34px;color:var(--gold-light);margin-bottom:6px;">
+      🎄 La Elfa Cris • Polo Norte 2026
+    </h1>
+    <p id="pre-subtitle-el" style="max-width:420px;opacity:0.92;margin-bottom:8px;">
+      La magia del Amigo Invisible se está preparando en el taller...
+    </p>
+
+    <!-- Bloque Pre-Entrega Estricta (Solo Cuenta Atrás) -->
+    <div id="pre-countdown-section" style="width:100%;max-width:420px;">
+      <div class="pre-countdown-grid">
+        <div class="pre-cd-box"><span id="cd-days" class="pre-cd-num">00</span><span class="pre-cd-lbl">Días</span></div>
+        <div class="pre-cd-box"><span id="cd-hours" class="pre-cd-num">00</span><span class="pre-cd-lbl">Horas</span></div>
+        <div class="pre-cd-box"><span id="cd-mins" class="pre-cd-num">00</span><span class="pre-cd-lbl">Min</span></div>
+        <div class="pre-cd-box"><span id="cd-secs" class="pre-cd-num">00</span><span class="pre-cd-lbl">Seg</span></div>
+      </div>
+      <div id="pre-clue-box" style="background:rgba(0,0,0,0.35);border:1px dashed var(--gold);border-radius:12px;padding:10px 14px;font-size:13px;color:var(--gold-light);margin-top:8px;">
+        ✨ Guarda bien tu tarjeta mágica. Cuando el reloj llegue a cero podrás introducir tu PIN secreto.
+      </div>
+    </div>
+
+    <div id="pre-bottom-banner-wrap" class="hidden" style="margin-top:12px;">
+      <img id="pre-bottom-banner-img" src="" alt="Banner inferior" style="max-width:320px;max-height:110px;border-radius:14px;border:2px solid var(--gold);">
+    </div>
+
+    <!-- Teclado PIN Participante (4 dígitos, oculto durante Pre-Entrega) -->
+    <div id="user-pin-panel" class="pin-panel hidden">
+      <div style="font-weight:800;color:var(--gold-light);font-size:15px;">🔑 Introduce tu PIN de 4 dígitos</div>
+      <div style="font-size:12px;opacity:0.8;margin-top:2px;">Lo encontrarás en tu Carta Mágica</div>
+      <div class="pin-dots" id="user-pin-dots">
+        <span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span><span class="pin-dot"></span>
+      </div>
+      <div class="keypad-grid" id="user-keypad">
+        <button type="button" class="key-btn" data-key="1">1</button>
+        <button type="button" class="key-btn" data-key="2">2</button>
+        <button type="button" class="key-btn" data-key="3">3</button>
+        <button type="button" class="key-btn" data-key="4">4</button>
+        <button type="button" class="key-btn" data-key="5">5</button>
+        <button type="button" class="key-btn" data-key="6">6</button>
+        <button type="button" class="key-btn" data-key="7">7</button>
+        <button type="button" class="key-btn" data-key="8">8</button>
+        <button type="button" class="key-btn" data-key="9">9</button>
+        <button type="button" class="key-btn key-del" data-key="DEL">⌫</button>
+        <button type="button" class="key-btn" data-key="0">0</button>
+        <button type="button" class="key-btn key-ok" data-key="OK">Entrar</button>
+      </div>
+    </div>
+
+    <!-- Teclado Secreto de Elfos (6-8 dígitos, doble clic o ?elfos=1) -->
+    <div id="elf-pin-panel" class="pin-panel hidden" style="border-color:#f87171;">
+      <div style="font-weight:800;color:#fca5a5;font-size:15px;">🧝‍♀️ Acceso Privado de Elfos</div>
+      <div style="font-size:12px;opacity:0.85;margin-top:2px;">Introduce la clave maestra (6–8 dígitos)</div>
+      <div id="elf-pin-display" style="margin:12px 0;font-size:22px;letter-spacing:6px;font-weight:800;color:var(--gold-light);min-height:30px;">••••••</div>
+      <div class="keypad-grid" id="elf-keypad">
+        <button type="button" class="key-btn" data-ekey="1">1</button>
+        <button type="button" class="key-btn" data-ekey="2">2</button>
+        <button type="button" class="key-btn" data-ekey="3">3</button>
+        <button type="button" class="key-btn" data-ekey="4">4</button>
+        <button type="button" class="key-btn" data-ekey="5">5</button>
+        <button type="button" class="key-btn" data-ekey="6">6</button>
+        <button type="button" class="key-btn" data-ekey="7">7</button>
+        <button type="button" class="key-btn" data-ekey="8">8</button>
+        <button type="button" class="key-btn" data-ekey="9">9</button>
+        <button type="button" class="key-btn key-del" data-ekey="DEL">⌫</button>
+        <button type="button" class="key-btn" data-ekey="0">0</button>
+        <button type="button" class="key-btn key-ok" data-ekey="OK">Abrir</button>
+      </div>
+      <button type="button" id="btn-close-elf-login" class="btn btn-outline btn-sm btn-block" style="margin-top:10px;">Cerrar acceso Elfos</button>
+    </div>
+  </section>
+
+  <!-- ==================== 2. BARRA SUPERIOR ELFOS / SIMULADOR ==================== -->
+  <div id="elf-top-bar" class="hidden">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="font-weight:800;font-size:13px;color:#fef3c7;">🧝‍♀️ Panel Elfos v16.6</span>
+      <span id="online-badge-top" class="status-pill st-online" style="font-size:11px;">🟢 0 online</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+      <select id="sim-user-select" style="width:auto;padding:5px 8px;font-size:12px;">
+        <option value="">👁️ Ver como Duende...</option>
+      </select>
+      <button type="button" id="btn-logout-admin" class="btn btn-danger btn-sm">Salir</button>
+    </div>
+  </div>
+
+  <div id="sim-active-banner" class="sim-banner hidden">
+    <span id="sim-banner-text">👁️ Simulando vista limpia de: Duende 1</span>
+    <button type="button" id="btn-exit-sim" class="btn btn-sm" style="background:#111827;color:#fff;">Volver a Panel Elfos</button>
+  </div>
+
+  <!-- ==================== 3. APLICACIÓN PARTICIPANTE (100% LIMPIA) ==================== -->
+  <main id="user-app" class="hidden">
+    <header id="app-header">
+      <button type="button" id="btn-toggle-user-fx">✨ Efectos: ON</button>
+      <div id="app-header-overlay">
+        <img id="hdr-media-img" class="hidden" src="" alt="Cabecera">
+        <h1 id="hdr-title-el">🎄 Polo Norte 2026</h1>
+        <p id="hdr-sub-el">Bienvenido/a al taller mágico</p>
+        <div id="user-welcome-pill" style="display:inline-block;margin-top:8px;background:rgba(0,0,0,0.45);border:1px solid var(--gold);padding:4px 14px;border-radius:999px;font-size:13px;font-weight:700;color:var(--gold-light);">
+          🎅 Hola, <span id="user-apodo-display">Duende</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <!-- Vista Inicio / Bloques -->
+      <div id="user-view-home">
+        <div id="user-blocks-container"></div>
+      </div>
+
+      <!-- Vista Muro Público -->
+      <div id="user-view-wall" class="hidden">
+        <div class="card">
+          <h2 class="card-title">📢 Muro del Polo Norte</h2>
+          <p style="font-size:13px;opacity:0.85;margin-bottom:10px;">Comparte pistas anónimas o mensajes navideños con todo el grupo (sin desvelar tu identidad).</p>
+          <textarea id="wall-post-input" placeholder="Escribe un mensaje navideño para el muro..."></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:8px;">
+            <label style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="wall-post-anon" checked> Publicar como Duende Misterioso
+            </label>
+            <button type="button" id="btn-send-wall" class="btn btn-gold btn-sm">Publicar ✨</button>
+          </div>
+        </div>
+        <div id="wall-posts-list"></div>
+      </div>
+
+      <!-- Vista Buzón Privado -->
+      <div id="user-view-dm" class="hidden">
+        <div class="card">
+          <h2 class="card-title">💌 Buzón Secreto de los Elfos</h2>
+          <p style="font-size:13px;opacity:0.85;margin-bottom:10px;">Envía un mensaje privado a otro participante o a La Elfa Cris. Todos los mensajes pasan por el filtro mágico de los Elfos para evitar spoilers.</p>
+          <label>Destinatario (Apodo):</label>
+          <select id="dm-recipient-select"></select>
+          <label>Tu mensaje:</label>
+          <textarea id="dm-message-input" placeholder="Escribe aquí tu mensaje secreto..."></textarea>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;">
+            <label style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer;">
+              <input type="checkbox" id="dm-anon-check" checked> Enviar de forma anónima
+            </label>
+            <button type="button" id="btn-send-dm" class="btn btn-primary btn-sm">Enviar al Buzón 📨</button>
+          </div>
+        </div>
+        <div class="card">
+          <h3 class="card-title" style="font-size:19px;">📬 Tus Mensajes Recibidos</h3>
+          <div id="user-dm-inbox"></div>
+        </div>
+      </div>
+    </div>
+
+    <nav id="bottom-nav">
+      <button type="button" class="nav-btn active" data-nav="home"><span>🏠</span><span>Inicio</span></button>
+      <button type="button" class="nav-btn" id="nav-btn-wall" data-nav="wall"><span>📢</span><span>Muro</span></button>
+      <button type="button" class="nav-btn" id="nav-btn-dm" data-nav="dm"><span>💌</span><span>Buzón</span></button>
+      <button type="button" class="nav-btn" id="btn-user-logout"><span>🚪</span><span>Salir</span></button>
+    </nav>
+  </main>
+
+  <!-- ==================== 4. PANEL MAESTRO DE ADMINISTRACIÓN (7 MÓDULOS) ==================== -->
+  <section id="admin-panel" class="hidden">
+    <div class="container">
+      <div class="admin-tabs-bar" id="admin-tabs-bar">
+        <button type="button" class="admin-tab-btn active" data-tab="tab-elfs">1. Elfos, Muro/Buzón & Moderación</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-users">2. Participantes, Telemetría & Matriz</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-blocks">3. Bloques & Cuenta Atrás</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-pre">4. Portada Pre-Entrega</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-design">5. Cabecera, Diseño & Lluvia</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-cards">6. Estudio Tarjetas & Correos</button>
+        <button type="button" class="admin-tab-btn" data-tab="tab-sheets">7. Netlify, Google Sheets & Backup</button>
+      </div>
+
+      <!-- TAB 1: ELFOS, INTERRUPTORES Y MODERACIÓN -->
+      <div id="tab-elfs" class="admin-tab-content">
+        <div class="card">
+          <h2 class="card-title">🎛️ Interruptores Generales de Comunicación</h2>
+          <div class="switch-row">
+            <div>
+              <strong>📢 Muro Público</strong>
+              <div style="font-size:12px;opacity:0.8;">Permite a los participantes ver y escribir en el tablón general.</div>
+            </div>
+            <input type="checkbox" id="cfg-wall-enabled">
+          </div>
+          <div class="switch-row">
+            <div>
+              <strong>💌 Buzón de Mensajes Privados</strong>
+              <div style="font-size:12px;opacity:0.8;">Activa o desactiva la pestaña de mensajes privados entre participantes.</div>
+            </div>
+            <input type="checkbox" id="cfg-dm-enabled">
+          </div>
+          <div class="switch-row">
+            <div>
+              <strong>🛡️ Moderar también publicaciones del Muro</strong>
+              <div style="font-size:12px;opacity:0.8;">Si está activo, los posts del muro requieren aprobación antes de mostrarse.</div>
+            </div>
+            <input type="checkbox" id="cfg-wall-mod">
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🛡️ Cola de Moderación & Alerta Anti-Spoilers</h2>
+          <p style="font-size:12px;opacity:0.85;margin-bottom:10px;">Revisa los mensajes privados antes de entregarlos. Si el remitente es el Amigo Invisible del destinatario, saltará una alerta roja automática.</p>
+          <div id="moderation-queue-list"></div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🔐 Claves Maestras de Elfos (6–8 dígitos) y QR Directo</h2>
+          <div class="grid-2">
+            <div>
+              <label>PIN Maestro La Elfa Cris:</label>
+              <input type="text" id="cfg-elfa-pin" maxlength="8" placeholder="999999">
+            </div>
+            <div>
+              <label>PIN Maestro Elfo Ayudante:</label>
+              <input type="text" id="cfg-elfo-pin" maxlength="8" placeholder="888888">
+            </div>
+          </div>
+          <button type="button" id="btn-save-elf-pins" class="btn btn-gold btn-sm" style="margin-top:10px;">Guardar Claves Elfos</button>
+          <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border-soft);display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+            <canvas id="elf-master-qr-canvas" style="background:#fff;padding:6px;border-radius:10px;"></canvas>
+            <div style="flex:1;min-width:200px;">
+              <strong style="color:var(--gold-light);font-size:13px;">Tarjeta QR Maestra para Elfos</strong>
+              <p style="font-size:12px;opacity:0.85;margin:4px 0 8px;">Apunta automáticamente a tu dominio actual con <code>?elfos=1</code>.</p>
+              <button type="button" id="btn-dl-elf-qr" class="btn btn-outline btn-sm">📥 Descargar QR Elfos (PNG)</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: PARTICIPANTES, TELEMETRÍA ULTRALIGERA, WHATSAPP Y MATRIZ -->
+      <div id="tab-users" class="admin-tab-content hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px;">
+            <h2 class="card-title" style="margin:0;">📡 Telemetría Ultraligera en Vivo</h2>
+            <button type="button" id="btn-sync-telemetry-top" class="btn btn-green btn-sm">🔄 Sincronizar Nube / Refrescar</button>
+          </div>
+          <div class="grid-4" id="telemetry-summary-cards"></div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">📊 Matriz de Progreso: Participantes × Tarjetas</h2>
+          <p style="font-size:12px;opacity:0.85;">Registra al instante cada lectura de QR o código validado (<code>✅ Leído HH:MM</code>), intentos fallidos (<code>⚠️ N fallos</code>) y accesos totales.</p>
+          <div class="grid-2" style="margin-top:8px;">
+            <div>
+              <label>Filtrar por Estado:</label>
+              <select id="matrix-filter-status">
+                <option value="all">Todos los participantes (22)</option>
+                <option value="online">🟢 Solo Online ahora</option>
+                <option value="pending_envio">⏳ Pendientes de Envío (E-xxx)</option>
+                <option value="pending_recep">📦 Pendientes de Recepción (R-xxx)</option>
+              </select>
+            </div>
+            <div style="display:flex;align-items:flex-end;">
+              <button type="button" id="btn-refresh-matrix" class="btn btn-outline btn-block">🔄 Actualizar Tabla</button>
+            </div>
+          </div>
+          <div class="matrix-wrap">
+            <table class="matrix-table" id="participants-matrix-table"></table>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🎲 Sorteo Automático del Amigo Invisible & Plantilla WhatsApp</h2>
+          <p style="font-size:12px;opacity:0.85;">Genera un ciclo único sin auto-asignaciones ni parejas cruzadas (A↔B). Configura también el mensaje privado para <strong>📲 WhatsApp</strong>.</p>
+          <label>Plantilla Mensaje Privado WhatsApp (variables: <code>{apodo}</code>, <code>{nombre}</code>, <code>{pin}</code>, <code>{url}</code>):</label>
+          <textarea id="cfg-wa-template">🎄 ¡Hola {nombre}! Soy La Elfa Cris del Polo Norte. Tu apodo secreto en el juego es *{apodo}* y tu PIN mágico de acceso es *{pin}*. Entra aquí cuando comience la magia: {url}</textarea>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+            <button type="button" id="btn-run-draw" class="btn btn-gold">🎲 Ejecutar Sorteo Automático (Ciclo Único)</button>
+            <button type="button" id="btn-export-csv" class="btn btn-outline">📤 Exportar CSV</button>
+            <label class="btn btn-outline" style="margin:0;cursor:pointer;">
+              📥 Importar CSV <input type="file" id="inp-import-csv" accept=".csv" class="hidden">
+            </label>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">👥 Fichas de los 22 Participantes (Apodo, Nombre Completo, Teléfono y 8 Campos Postales)</h2>
+          <p style="font-size:12px;opacity:0.85;margin-bottom:10px;">El <strong>Apodo</strong> es lo único visible en la app; <strong>Nombre y Apellidos</strong> y los <strong>8 campos postales</strong> solo se usan para Correos, el Sobre Dorado y WhatsApp.</p>
+          <div id="participants-editor-list"></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: BLOQUES, 4 ESTADOS, CUENTA ATRÁS INDIVIDUAL Y BLOQUES DORADOS PROTEGIDOS -->
+      <div id="tab-blocks" class="admin-tab-content hidden">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">
+            <div>
+              <h2 class="card-title" style="margin:0;">🧩 Bloques y Misiones del Juego</h2>
+              <p style="font-size:12px;opacity:0.85;">Los 2 bloques dorados principales (Sobre Dorado Envío y Recepción) están protegidos contra borrado pero son 100% editables y duplicables.</p>
+            </div>
+            <button type="button" id="btn-add-block" class="btn btn-gold btn-sm">➕ Nuevo Bloque</button>
+          </div>
+        </div>
+        <div id="admin-blocks-list"></div>
+      </div>
+
+      <!-- TAB 4: PORTADA PRE-ENTREGA 100% EDITABLE -->
+      <div id="tab-pre" class="admin-tab-content hidden">
+        <div class="card">
+          <h2 class="card-title">⏳ Configuración 100% Editable de la Portada Pre-Entrega</h2>
+          <div class="switch-row" style="border-color:var(--gold);">
+            <div>
+              <strong>🔒 Activar Modo Pre-Entrega (Solo Cuenta Atrás)</strong>
+              <div style="font-size:12px;opacity:0.85;">Cuando está activo, los participantes ven SOLO el retrato de La Elfa Cris y la cuenta atrás (sin teclado PIN).</div>
+            </div>
+            <input type="checkbox" id="cfg-pre-active">
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Fecha y Hora Objetivo Cuenta Atrás:</label>
+              <input type="datetime-local" id="cfg-pre-target">
+            </div>
+            <div>
+              <label>Tipografía Portada:</label>
+              <select id="cfg-pre-font">
+                <option value="'Mountains of Christmas', cursive">Mountains of Christmas</option>
+                <option value="'Cinzel', serif">Cinzel Elegante</option>
+                <option value="'Great Vibes', cursive">Great Vibes Caligráfica</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Poppins', sans-serif">Poppins Moderna</option>
+                <option value="'Pacifico', cursive">Pacifico Festiva</option>
+              </select>
+            </div>
+          </div>
+
+          <label>Título Principal Portada:</label>
+          <input type="text" id="cfg-pre-title">
+          <label>Subtítulo / Mensaje Mágico:</label>
+          <textarea id="cfg-pre-subtitle"></textarea>
+          <label>Nota / Pista Secreta bajo el reloj:</label>
+          <input type="text" id="cfg-pre-clue">
+
+          <div class="grid-3">
+            <div><label>Tam. Título (px):</label><input type="number" id="cfg-pre-title-size" min="20" max="60"></div>
+            <div><label>Color Fondo Portada:</label><input type="color" id="cfg-pre-bg"></div>
+            <div><label>Color Cajas Reloj:</label><input type="color" id="cfg-pre-box-bg"></div>
+          </div>
+
+          <label>Retrato Circular de La Elfa Cris (Subir imagen/GIF o pegar URL):</label>
+          <div class="grid-2">
+            <input type="url" id="cfg-pre-avatar-url" placeholder="https://...">
+            <input type="file" id="inp-pre-avatar-file" accept="image/*">
+          </div>
+
+          <div class="grid-2">
+            <div>
+              <label>Banner / GIF Superior (URL o subir):</label>
+              <input type="url" id="cfg-pre-top-gif" placeholder="https://...">
+              <input type="file" id="inp-pre-top-file" accept="image/*" style="margin-top:4px;">
+            </div>
+            <div>
+              <label>Banner / GIF Inferior (URL o subir):</label>
+              <input type="url" id="cfg-pre-bot-gif" placeholder="https://...">
+              <input type="file" id="inp-pre-bot-file" accept="image/*" style="margin-top:4px;">
+            </div>
+          </div>
+
+          <button type="button" id="btn-save-pre" class="btn btn-gold btn-block" style="margin-top:14px;">💾 Guardar Portada Pre-Entrega</button>
+        </div>
+      </div>
+
+      <!-- TAB 5: CABECERA 100% EDITABLE, DISEÑO Y LLUVIA DE OBJETOS -->
+      <div id="tab-design" class="admin-tab-content hidden">
+        <div class="card">
+          <h2 class="card-title">👑 Cabecera Principal 100% Editable</h2>
+          <label>Título de la Cabecera:</label>
+          <input type="text" id="cfg-hdr-title">
+          <label>Subtítulo de la Cabecera:</label>
+          <input type="text" id="cfg-hdr-sub">
+
+          <div class="grid-3">
+            <div>
+              <label>Fuente Cabecera:</label>
+              <select id="cfg-hdr-font">
+                <option value="'Mountains of Christmas', cursive">Mountains of Christmas</option>
+                <option value="'Cinzel', serif">Cinzel</option>
+                <option value="'Great Vibes', cursive">Great Vibes</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Poppins', sans-serif">Poppins</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+              </select>
+            </div>
+            <div><label>Tam. Título (px):</label><input type="number" id="cfg-hdr-title-size" min="18" max="54"></div>
+            <div><label>Tam. Subtítulo (px):</label><input type="number" id="cfg-hdr-sub-size" min="11" max="28"></div>
+          </div>
+
+          <div class="grid-4">
+            <div><label>Degradado 1:</label><input type="color" id="cfg-hdr-bg1"></div>
+            <div><label>Degradado 2:</label><input type="color" id="cfg-hdr-bg2"></div>
+            <div><label>Color Borde:</label><input type="color" id="cfg-hdr-border"></div>
+            <div><label>Color Título:</label><input type="color" id="cfg-hdr-tcolor"></div>
+          </div>
+
+          <label>Imagen o GIF Animado de Cabecera (URL o subir desde PC):</label>
+          <div class="grid-2">
+            <input type="url" id="cfg-hdr-media-url" placeholder="https://...gif">
+            <input type="file" id="inp-hdr-media-file" accept="image/*">
+          </div>
+          <label>Modo de visualización de la Imagen/GIF en Cabecera:</label>
+          <select id="cfg-hdr-media-mode">
+            <option value="none">Sin imagen/GIF</option>
+            <option value="banner">Banner superior redondeado</option>
+            <option value="emblem">Emblema circular centrado</option>
+            <option value="bg">Fondo decorativo completo</option>
+          </select>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🌨️ Lluvia de Partículas / Objetos Dinámicos</h2>
+          <div class="switch-row">
+            <div>
+              <strong>Activar Lluvia de Objetos Global</strong>
+              <div style="font-size:12px;opacity:0.8;">Los participantes también tienen un botón en su cabecera para pausarla si les molesta.</div>
+            </div>
+            <input type="checkbox" id="cfg-fx-enabled">
+          </div>
+          <label>Preajustes Rápidos:</label>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:4px;">
+            <button type="button" class="btn btn-outline btn-sm fx-preset-btn" data-fx="❄️,❅,❆">❄️ Copos de nieve</button>
+            <button type="button" class="btn btn-outline btn-sm fx-preset-btn" data-fx="💧,🌧️,💦">🌧️ Gotas de lluvia</button>
+            <button type="button" class="btn btn-outline btn-sm fx-preset-btn" data-fx="✨,⭐,🌟">✨ Destellos dorados</button>
+            <button type="button" class="btn btn-outline btn-sm fx-preset-btn" data-fx="🍂,🍁,🍃">🍂 Hojas</button>
+            <button type="button" class="btn btn-outline btn-sm fx-preset-btn" data-fx="🎁,🎄,🔔">🎁 Regalos</button>
+          </div>
+          <label>Emojis / Caracteres personalizados (separados por comas):</label>
+          <input type="text" id="cfg-fx-chars" placeholder="❄️,✨,🎄">
+          <label>O subir mini-imagen/icono personalizado (opcional):</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="file" id="inp-fx-custom-img" accept="image/*">
+            <button type="button" id="btn-clear-fx-img" class="btn btn-danger btn-sm">Quitar img</button>
+          </div>
+          <div class="grid-2">
+            <div><label>Cantidad simultánea (5–45):</label><input type="number" id="cfg-fx-count" min="5" max="45"></div>
+            <div><label>Velocidad caída (segundos, 3=rápido, 14=lento):</label><input type="number" id="cfg-fx-speed" min="3" max="14"></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🎨 Paleta Navideña y Tipografías Globales</h2>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;">
+            <button type="button" class="btn btn-outline btn-sm theme-preset-btn" data-theme="forest">🌲 Bosque Navideño</button>
+            <button type="button" class="btn btn-outline btn-sm theme-preset-btn" data-theme="crimson">🎅 Rojo Polo Norte</button>
+            <button type="button" class="btn btn-outline btn-sm theme-preset-btn" data-theme="royal">👑 Gala Dorada</button>
+          </div>
+          <div class="grid-4">
+            <div><label>Fondo App:</label><input type="color" id="cfg-col-bg"></div>
+            <div><label>Fondo Tarjetas:</label><input type="color" id="cfg-col-card"></div>
+            <div><label>Acento Dorado:</label><input type="color" id="cfg-col-gold"></div>
+            <div><label>Texto Principal:</label><input type="color" id="cfg-col-text"></div>
+          </div>
+          <div class="grid-3">
+            <div>
+              <label>Fuente Títulos Bloque:</label>
+              <select id="cfg-font-title">
+                <option value="'Mountains of Christmas', cursive">Mountains of Christmas</option>
+                <option value="'Cinzel', serif">Cinzel</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Poppins', sans-serif">Poppins</option>
+              </select>
+            </div>
+            <div><label>Tam. Títulos (px):</label><input type="number" id="cfg-size-title" min="16" max="38"></div>
+            <div><label>Tam. Textos (px):</label><input type="number" id="cfg-size-body" min="12" max="22"></div>
+          </div>
+          <button type="button" id="btn-save-design" class="btn btn-gold btn-block" style="margin-top:14px;">💾 Aplicar y Guardar Diseño</button>
+        </div>
+      </div>
+
+      <!-- TAB 6: ESTUDIO GRÁFICO DE TARJETAS EDITABLES Y ETIQUETAS CORREOS (REMITENTE CRIS LA ELFA) -->
+      <div id="tab-cards" class="admin-tab-content hidden">
+        <div class="card gold-card">
+          <h2 class="card-title">📮 Dirección Fija del Remitente Anónimo: "CRIS LA ELFA"</h2>
+          <p style="font-size:12px;opacity:0.92;margin-bottom:8px;">Esta dirección aparecerá SIEMPRE en la esquina superior izquierda de todas las Etiquetas Oficiales de Correos (nunca la dirección real del participante que envía).</p>
+          <div class="grid-4">
+            <div style="grid-column:span 2;"><label>Calle / Vía:</label><input type="text" id="sender-calle"></div>
+            <div><label>Número:</label><input type="text" id="sender-numero"></div>
+            <div><label>Portal:</label><input type="text" id="sender-portal"></div>
+          </div>
+          <div class="grid-4">
+            <div><label>Piso:</label><input type="text" id="sender-piso"></div>
+            <div><label>Puerta:</label><input type="text" id="sender-puerta"></div>
+            <div><label>Código Postal:</label><input type="text" id="sender-cp"></div>
+            <div><label>Ciudad:</label><input type="text" id="sender-ciudad"></div>
+          </div>
+          <div class="grid-2">
+            <div><label>Provincia:</label><input type="text" id="sender-provincia"></div>
+            <div style="display:flex;align-items:flex-end;">
+              <button type="button" id="btn-save-sender" class="btn btn-gold btn-block">💾 Guardar Remitente CRIS LA ELFA</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">🖨️ Estudio Gráfico de Tarjetas Imprimibles (6 Formatos Editables)</h2>
+          <div class="grid-2">
+            <div>
+              <label>Formato de Tarjeta / Etiqueta:</label>
+              <select id="pdf-format-select">
+                <option value="carta">1. La Carta Mágica A4 (con cupón PIN + QR)</option>
+                <option value="portable">2. Tarjeta QR Portable (Apodo + QR, SIN PIN)</option>
+                <option value="preentrega">3. Pegatina Cierre Sobre Exterior (Pre-Entrega)</option>
+                <option value="dorado">4. Precinto Sobre Dorado Interior (Recepción)</option>
+                <option value="miniqr">5. Mini-QRs Duales: Envío (E-xxx) y Recepción (R-xxx)</option>
+                <option value="correos">6. Etiquetas Oficiales Correos (Remitente CRIS LA ELFA)</option>
+              </select>
+            </div>
+            <div>
+              <label>Participante de Muestra:</label>
+              <select id="pdf-sample-user"></select>
+            </div>
+          </div>
+
+          <div class="grid-3">
+            <div><label>Color Fondo Tarjeta:</label><input type="color" id="card-style-bg"></div>
+            <div><label>Color Marco / Acento:</label><input type="color" id="card-style-border"></div>
+            <div><label>Color Texto:</label><input type="color" id="card-style-text"></div>
+          </div>
+
+          <label>Título Superior Editable de este Formato:</label>
+          <input type="text" id="card-style-title">
+          <label>Subtítulo / Insignia Editable:</label>
+          <input type="text" id="card-style-sub">
+          <label>Texto / Instrucciones Inferiores Editables:</label>
+          <textarea id="card-style-footer"></textarea>
+
+          <label>Plantilla PNG de Fondo Personalizada (opcional):</label>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <input type="file" id="inp-card-bg-png" accept="image/*">
+            <button type="button" id="btn-clear-card-png" class="btn btn-danger btn-sm">Quitar PNG</button>
+          </div>
+
+          <canvas id="card-preview-canvas" width="600" height="400"></canvas>
+
+          <div class="grid-2" style="margin-top:10px;">
+            <button type="button" id="btn-dl-single-pdf" class="btn btn-outline">📄 Descargar PDF (1 muestra)</button>
+            <button type="button" id="btn-dl-batch-pdf" class="btn btn-gold">📚 Descargar Lote 22 Participantes (PDF A4)</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 7: NETLIFY, GOOGLE SHEETS Y RESPALDO -->
+      <div id="tab-sheets" class="admin-tab-content hidden">
+        <div class="card">
+          <h2 class="card-title">🌐 Dominio Activo (Netlify / Web) & Nube Google Sheets</h2>
+          <p style="font-size:12px;opacity:0.85;margin-bottom:8px;">
+            Esta versión v16.6 funciona 100% independiente en <strong>Netlify Drop</strong> o cualquier dominio propio. Todos los QRs apuntan automáticamente a tu dirección actual:
+          </p>
+          <div id="current-live-url-box" style="background:rgba(0,0,0,0.4);padding:8px 12px;border-radius:10px;border:1px solid var(--gold);font-size:12px;color:var(--gold-light);word-break:break-all;margin-bottom:10px;"></div>
+
+          <label>URL opcional de tu Web App de Google Apps Script (<code>/exec</code>) para sincronizar los 22 móviles en la nube:</label>
+          <input type="url" id="cfg-webapp-url" placeholder="https://script.google.com/macros/s/.../exec">
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;">
+            <button type="button" id="btn-sync-now" class="btn btn-green">☁️ Subir Estado a Nube</button>
+            <button type="button" id="btn-pull-now" class="btn btn-outline">⬇️ Descargar Telemetría de Nube</button>
+            <button type="button" id="btn-copy-gas-code" class="btn btn-gold">📋 Copiar Code.gs para Google Sheets</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2 class="card-title">💾 Copia de Seguridad Completa (.JSON)</h2>
+          <p style="font-size:12px;opacity:0.85;margin-bottom:10px;">Descarga toda la configuración, participantes, bloques y telemetría en un archivo JSON o restaura una copia anterior.</p>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button type="button" id="btn-export-json" class="btn btn-gold">📥 Exportar Backup JSON</button>
+            <label class="btn btn-outline" style="margin:0;cursor:pointer;">
+              📤 Restaurar JSON <input type="file" id="inp-import-json" accept=".json" class="hidden">
+            </label>
+            <button type="button" id="btn-reset-defaults" class="btn btn-danger">⚠️ Restaurar Fábrica</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==================== 5. MODAL ESCÁNER QR CON CÁMARA ==================== -->
+  <div id="qr-modal" class="hidden">
+    <div class="qr-modal-box">
+      <h3 style="font-family:var(--font-title);font-size:24px;color:var(--gold-light);">📷 Escáner Mágico QR</h3>
+      <p style="font-size:12px;opacity:0.85;">Enfoca el código QR de tu tarjeta o etiqueta</p>
+      <div id="qr-reader"></div>
+      <button type="button" id="btn-close-qr-modal" class="btn btn-danger btn-block">Cerrar Cámara</button>
+    </div>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const STORAGE_KEY = 'elfa_cris_v16_6_netlify_state';
+
+      const DEFAULT_ELFA_SVG = 'data:image/svg+xml;utf8,' + encodeURIComponent(`
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+          <defs>
+            <radialGradient id="bg" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#dc2626"/>
+              <stop offset="100%" stop-color="#14532d"/>
+            </radialGradient>
+          </defs>
+          <circle cx="100" cy="100" r="100" fill="url(#bg)"/>
+          <circle cx="100" cy="112" r="46" fill="#fde68a"/>
+          <path d="M54 96 Q100 25 146 96 Z" fill="#15803d"/>
+          <rect x="48" y="90" width="104" height="14" rx="7" fill="#fef3c7"/>
+          <circle cx="100" cy="34" r="11" fill="#fbbf24"/>
+          <circle cx="84" cy="108" r="5" fill="#1f2937"/>
+          <circle cx="116" cy="108" r="5" fill="#1f2937"/>
+          <circle cx="75" cy="120" r="7" fill="#f87171" opacity="0.6"/>
+          <circle cx="125" cy="120" r="7" fill="#f87171" opacity="0.6"/>
+          <path d="M84 126 Q100 142 116 126" stroke="#991b1b" stroke-width="4" fill="none" stroke-linecap="round"/>
+          <polygon points="44,108 54,100 54,118" fill="#fde68a"/>
+          <polygon points="156,108 146,100 146,118" fill="#fde68a"/>
+        </svg>
+      `);
+
+      function getLiveBaseUrl() {
+        return window.location.origin + window.location.pathname;
+      }
+
+      function buildDefaultParticipants() {
+        const list = [];
+        for (let i = 1; i <= 22; i++) {
+          const pin = String(1000 + ((i * 379) % 8999)).padStart(4, '0');
+          list.push({
+            id: i,
+            apodo: `Duende ${i}`,
+            nombreCompleto: `Participante Oficial ${i} Apellido`,
+            telefono: `6000000${String(i).padStart(2, '0')}`,
+            pin: pin,
+            codeEnvio: `E-${String(100 + i)}`,
+            codeRecep: `R-${String(500 + i)}`,
+            assignedToId: i < 22 ? i + 1 : 1,
+            calle: 'Calle de la Navidad',
+            numero: String(i),
+            portal: i % 2 === 0 ? 'B' : '',
+            piso: String((i % 4) + 1) + 'º',
+            puerta: i % 2 === 0 ? 'Izq' : 'Dcha',
+            cp: '28001',
+            ciudad: 'Madrid',
+            provincia: 'Madrid',
+            // Telemetría ultraligera: accesos, última conexión y mapa compacto por tarjeta ('ok:HH:MM' | 'err:N' | 'view')
+            logins: 0,
+            lastSeen: 0,
+            cards: {}
+          });
+        }
+        return list;
+      }
+
+      function buildDefaultBlocks() {
+        return [
+          {
+            id: 'core_gold_envio',
+            protected: true,
+            isGold: true,
+            title: '✨ Misión Sobre Dorado: Envío Secreto',
+            subtitle: 'Abre tu Sobre Dorado cuando los Elfos den la señal',
+            body: 'Escanea el código QR de tu etiqueta de envío (E-xxx) o introduce el código impreso para descubrir la dirección postal de tu Amigo Invisible. Recuerda poner SIEMPRE como remitente a CRIS LA ELFA.',
+            state: 'soon',
+            soonMessage: '¡Shhh! El Sobre Dorado se abrirá muy pronto. Espera la señal de La Elfa Cris.',
+            qrType: 'envio',
+            secretKeyword: '',
+            videoBefore: '',
+            videoAfter: '',
+            imageUrl: '',
+            countdownEnabled: false,
+            countdownTarget: '',
+            countdownAutoOpen: true,
+            fontFamily: '',
+            titleSize: 23,
+            bodySize: 15
+          },
+          {
+            id: 'core_gold_recepcion',
+            protected: true,
+            isGold: true,
+            title: '🎁 Misión Sobre Dorado: Recepción del Regalo',
+            subtitle: 'Confirma cuando el trineo entregue tu paquete',
+            body: 'Cuando recibas tu paquete en casa, escanea el código QR del precinto dorado (R-xxx) para confirmar a los Elfos que el regalo ha llegado sano y salvo.',
+            state: 'locked',
+            soonMessage: 'Disponible en cuanto comiencen los envíos mágicos.',
+            qrType: 'recep',
+            secretKeyword: '',
+            videoBefore: '',
+            videoAfter: '',
+            imageUrl: '',
+            countdownEnabled: false,
+            countdownTarget: '',
+            countdownAutoOpen: false,
+            fontFamily: '',
+            titleSize: 23,
+            bodySize: 15
+          },
+          {
+            id: 'block_welcome_mission',
+            protected: false,
+            isGold: false,
+            title: '🎄 Bienvenida al Taller del Polo Norte',
+            subtitle: 'Tu primera misión como Duende Oficial',
+            body: 'Explora tu panel, mantén el secreto de tu identidad y prepárate para las pistas que iremos publicando.',
+            state: 'active',
+            soonMessage: 'Próximamente...',
+            qrType: 'none',
+            secretKeyword: '',
+            videoBefore: '',
+            videoAfter: '',
+            imageUrl: '',
+            countdownEnabled: false,
+            countdownTarget: '',
+            countdownAutoOpen: true,
+            fontFamily: '',
+            titleSize: 21,
+            bodySize: 15
+          }
+        ];
+      }
+
+      const DEFAULT_STATE = {
+        elfPins: { elfa: '999999', elfo: '888888' },
+        comm: { wallEnabled: true, dmEnabled: true, wallModeration: false },
+        preDelivery: {
+          active: true,
+          targetDate: '2026-12-10T20:00',
+          title: '🎄 La Elfa Cris • Polo Norte 2026',
+          subtitle: 'La magia del Amigo Invisible se está preparando en el taller...',
+          clue: '✨ Guarda bien tu tarjeta mágica. Cuando el reloj llegue a cero podrás introducir tu PIN secreto.',
+          avatarUrl: '',
+          topGifUrl: '',
+          bottomGifUrl: '',
+          bgColor: '#0f291e',
+          boxBgColor: '#1a0b0e',
+          fontFamily: "'Mountains of Christmas', cursive",
+          titleSize: 34
+        },
+        header: {
+          title: '🎄 Polo Norte • Amigo Invisible 2026',
+          subtitle: 'Taller Secreto de La Elfa Cris',
+          fontFamily: "'Mountains of Christmas', cursive",
+          titleSize: 30,
+          subSize: 14,
+          bg1: '#881337',
+          bg2: '#14532d',
+          borderColor: '#f59e0b',
+          titleColor: '#fef08a',
+          mediaUrl: '',
+          mediaMode: 'none'
+        },
+        theme: {
+          bgMain: '#0f291e',
+          bgCard: '#163829',
+          gold: '#f59e0b',
+          textMain: '#fefce8',
+          fontTitle: "'Mountains of Christmas', cursive",
+          sizeTitle: 22,
+          sizeBody: 15
+        },
+        particles: { enabled: true, chars: '❄️,✨,🎄', customImg: '', count: 22, speed: 8 },
+        fixedSender: {
+          name: 'CRIS LA ELFA',
+          calle: 'Avenida del Polo Norte',
+          numero: '1',
+          portal: 'Taller',
+          piso: 'Bajo',
+          puerta: 'Mágica',
+          cp: '28001',
+          ciudad: 'Madrid',
+          provincia: 'Madrid'
+        },
+        waTemplate: '🎄 ¡Hola {nombre}! Soy La Elfa Cris del Polo Norte. Tu apodo secreto en el juego es *{apodo}* y tu PIN mágico de acceso es *{pin}*. Entra aquí cuando comience la magia: {url}',
+        cardStyles: {
+          carta: { bg: '#fffbeb', border: '#b91c1c', text: '#1f2937', title: 'CARTA OFICIAL DEL POLO NORTE', sub: 'De parte de La Elfa Cris', footer: 'Recorta tu cupón inferior. Nunca reveles tu apodo secreto.', customPng: '' },
+          portable: { bg: '#7f1d1d', border: '#f59e0b', text: '#fefce8', title: 'PASE VIP POLO NORTE', sub: 'Tarjeta Personal Intransferible', footer: 'Escanea este QR para acceder al taller mágico.', customPng: '' },
+          preentrega: { bg: '#14532d', border: '#fbbf24', text: '#fefce8', title: '⏳ ¡ALTO! PRE-ENTREGA', sub: 'No abrir hasta la cuenta atrás', footer: 'Escanea para ver cuánto falta para el gran momento.', customPng: '' },
+          dorado: { bg: '#78350f', border: '#fde047', text: '#fef9c3', title: '✨ SOBRE DORADO SECRETO', sub: 'Precinto Oficial de Misión', footer: 'Escanea al recibir tu paquete para avisar a los Elfos.', customPng: '' },
+          miniqr: { bg: '#ffffff', border: '#15803d', text: '#111827', title: 'ETIQUETA DE CONTROL QR', sub: 'Envío y Recepción Mágica', footer: 'Pega E-xxx en tu envío y conserva R-xxx.', customPng: '' },
+          correos: { bg: '#ffffff', border: '#1e3a8a', text: '#111827', title: 'ENVÍO POSTAL POLO NORTE', sub: 'Remitente Oficial: CRIS LA ELFA', footer: 'Entregar en mano con cariño navideño.', customPng: '' }
+        },
+        webAppUrl: '',
+        participants: buildDefaultParticipants(),
+        blocks: buildDefaultBlocks(),
+        wallPosts: [
+          { id: 'w1', author: 'La Elfa Cris 🧝‍♀️', text: '¡Bienvenidos al taller mágico! Estad muy atentos a las señales doradas.', time: 'Hoy' }
+        ],
+        messages: []
+      };
+
+      let STATE = loadState();
+      let currentUser = null;
+      let isAdmin = false;
+      let simulatingUser = null;
+      let userPinBuffer = '';
+      let elfPinBuffer = '';
+      let userFxOn = true;
+      let html5QrInstance = null;
+      let activeQrBlockId = null;
+
+      function loadState() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (!raw) return JSON.parse(JSON.stringify(DEFAULT_STATE));
+          return deepMerge(JSON.parse(JSON.stringify(DEFAULT_STATE)), JSON.parse(raw));
+        } catch (e) {
+          return JSON.parse(JSON.stringify(DEFAULT_STATE));
+        }
+      }
+
+      function deepMerge(target, source) {
+        for (const key of Object.keys(source)) {
+          if (source[key] && typeof source[key] === 'object' && !Array.isArray(source[key])) {
+            if (!target[key]) target[key] = {};
+            deepMerge(target[key], source[key]);
+          } else {
+            target[key] = source[key];
+          }
+        }
+        return target;
+      }
+
+      // Guardado local instantáneo + sincronización ligera CORS-safe con Google Apps Script (Netlify Ready)
+      function saveState(pushToCloud = false) {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(STATE));
+        } catch (e) {}
+
+        if (pushToCloud && STATE.webAppUrl) {
+          fetch(STATE.webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({ action: 'syncAll', state: STATE })
+          }).catch(() => {});
+        }
+      }
+
+      // Envío ultraligero inmediato cuando un participante lee un QR o inicia sesión
+      function pushLightTelemetry(participant) {
+        saveState(false);
+        if (STATE.webAppUrl && participant) {
+          fetch(STATE.webAppUrl, {
+            method: 'POST',
+            mode: 'no-cors',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: JSON.stringify({
+              action: 'telemetry',
+              id: participant.id,
+              logins: participant.logins,
+              lastSeen: participant.lastSeen,
+              cards: participant.cards
+            })
+          }).catch(() => {});
+        }
+      }
+
+      function pullFromCloud(silent = false) {
+        if (!STATE.webAppUrl) {
+          if (!silent) showToast('Configura primero la URL de tu Web App en la pestaña 7');
+          return;
+        }
+        fetch(STATE.webAppUrl + (STATE.webAppUrl.includes('?') ? '&' : '?') + 'action=getState')
+          .then(r => r.json())
+          .then(remote => {
+            if (remote && remote.participants) {
+              STATE = deepMerge(STATE, remote);
+              saveState(false);
+              applyVisualTheme();
+              if (isAdmin) renderAllAdminTabs();
+              if (!silent) showToast('☁️ Datos y lecturas QR sincronizados desde la nube');
+            }
+          })
+          .catch(() => {
+            if (!silent) showToast('No se pudo conectar con la URL remota');
+          });
+      }
+
+      function showToast(msg) {
+        const box = document.getElementById('toast-box');
+        box.textContent = msg;
+        box.classList.remove('hidden');
+        clearTimeout(box._timer);
+        box._timer = setTimeout(() => box.classList.add('hidden'), 3200);
+      }
+
+      function formatPostalAddress(obj) {
+        const line1Parts = [obj.calle, obj.numero ? `Nº ${obj.numero}` : ''].filter(Boolean).join(', ');
+        const line2Parts = [
+          obj.portal ? `Portal ${obj.portal}` : '',
+          obj.piso ? `Piso ${obj.piso}` : '',
+          obj.puerta ? `Pta. ${obj.puerta}` : ''
+        ].filter(Boolean).join(' · ');
+        const line3Parts = [obj.cp, obj.ciudad, obj.provincia ? `(${obj.provincia})` : ''].filter(Boolean).join(' ');
+        return [line1Parts, line2Parts, line3Parts].filter(Boolean);
+      }
+
+      // ==================== APLICACIÓN DE TEMA, PORTADA Y PARTÍCULAS ====================
+      function applyVisualTheme() {
+        const r = document.documentElement.style;
+        r.setProperty('--bg-main', STATE.theme.bgMain);
+        r.setProperty('--bg-card', STATE.theme.bgCard);
+        r.setProperty('--gold', STATE.theme.gold);
+        r.setProperty('--text-main', STATE.theme.textMain);
+        r.setProperty('--font-title', STATE.theme.fontTitle);
+        r.setProperty('--size-block-title', STATE.theme.sizeTitle + 'px');
+        r.setProperty('--size-body', STATE.theme.sizeBody + 'px');
+
+        const pre = STATE.preDelivery;
+        document.getElementById('auth-screen').style.backgroundColor = pre.bgColor;
+        const preTitle = document.getElementById('pre-title-el');
+        preTitle.textContent = pre.title;
+        preTitle.style.fontFamily = pre.fontFamily;
+        preTitle.style.fontSize = pre.titleSize + 'px';
+        document.getElementById('pre-subtitle-el').textContent = pre.subtitle;
+        document.getElementById('pre-clue-box').textContent = pre.clue;
+        document.getElementById('elfa-portrait-img').src = pre.avatarUrl || DEFAULT_ELFA_SVG;
+        document.querySelectorAll('.pre-cd-box').forEach(b => { b.style.backgroundColor = pre.boxBgColor; });
+
+        const topWrap = document.getElementById('pre-top-banner-wrap');
+        if (pre.topGifUrl) {
+          document.getElementById('pre-top-banner-img').src = pre.topGifUrl;
+          topWrap.classList.remove('hidden');
+        } else topWrap.classList.add('hidden');
+
+        const botWrap = document.getElementById('pre-bottom-banner-wrap');
+        if (pre.bottomGifUrl) {
+          document.getElementById('pre-bottom-banner-img').src = pre.bottomGifUrl;
+          botWrap.classList.remove('hidden');
+        } else botWrap.classList.add('hidden');
+
+        const hdr = STATE.header;
+        const hdrEl = document.getElementById('app-header');
+        hdrEl.style.borderBottomColor = hdr.borderColor;
+        hdrEl.classList.remove('mode-bg');
+        hdrEl.style.backgroundImage = `linear-gradient(135deg, ${hdr.bg1} 0%, ${hdr.bg2} 100%)`;
+
+        const hdrImg = document.getElementById('hdr-media-img');
+        hdrImg.className = 'hidden';
+        if (hdr.mediaUrl && hdr.mediaMode !== 'none') {
+          if (hdr.mediaMode === 'bg') {
+            hdrEl.classList.add('mode-bg');
+            hdrEl.style.backgroundImage = `url("${hdr.mediaUrl}")`;
+          } else if (hdr.mediaMode === 'banner') {
+            hdrImg.src = hdr.mediaUrl;
+            hdrImg.className = 'header-media-banner';
+          } else if (hdr.mediaMode === 'emblem') {
+            hdrImg.src = hdr.mediaUrl;
+            hdrImg.className = 'header-media-emblem';
+          }
+        }
+
+        const hTitle = document.getElementById('hdr-title-el');
+        hTitle.textContent = hdr.title;
+        hTitle.style.fontFamily = hdr.fontFamily;
+        hTitle.style.fontSize = hdr.titleSize + 'px';
+        hTitle.style.color = hdr.titleColor;
+
+        const hSub = document.getElementById('hdr-sub-el');
+        hSub.textContent = hdr.subtitle;
+        hSub.style.fontSize = hdr.subSize + 'px';
+
+        renderParticles();
+      }
+
+      function renderParticles() {
+        const container = document.getElementById('particles-canvas');
+        container.innerHTML = '';
+        if (!STATE.particles.enabled || !userFxOn) return;
+
+        const chars = STATE.particles.chars.split(',').map(s => s.trim()).filter(Boolean);
+        const count = Math.min(45, Math.max(5, Number(STATE.particles.count) || 20));
+        const baseSpeed = Math.min(14, Math.max(3, Number(STATE.particles.speed) || 8));
+
+        for (let i = 0; i < count; i++) {
+          const el = document.createElement('div');
+          el.className = 'falling-particle';
+          el.style.left = Math.random() * 100 + 'vw';
+          el.style.animationDuration = (baseSpeed + Math.random() * 5) + 's';
+          el.style.animationDelay = (-Math.random() * 10) + 's';
+
+          if (STATE.particles.customImg) {
+            const img = document.createElement('img');
+            img.src = STATE.particles.customImg;
+            img.style.width = (18 + Math.random() * 14) + 'px';
+            el.appendChild(img);
+          } else {
+            el.textContent = chars[i % chars.length] || '❄️';
+            el.style.fontSize = (14 + Math.random() * 14) + 'px';
+          }
+          container.appendChild(el);
+        }
+      }
+
+      // ==================== RELOJES EN TIEMPO REAL ====================
+      function updateAllCountdowns() {
+        const now = Date.now();
+        const target = new Date(STATE.preDelivery.targetDate).getTime();
+        const diff = Math.max(0, target - now);
+        document.getElementById('cd-days').textContent = String(Math.floor(diff / 86400000)).padStart(2, '0');
+        document.getElementById('cd-hours').textContent = String(Math.floor((diff % 86400000) / 3600000)).padStart(2, '0');
+        document.getElementById('cd-mins').textContent = String(Math.floor((diff % 3600000) / 60000)).padStart(2, '0');
+        document.getElementById('cd-secs').textContent = String(Math.floor((diff % 60000) / 1000)).padStart(2, '0');
+
+        document.querySelectorAll('[data-block-cd]').forEach(el => {
+          const bTarget = Number(el.getAttribute('data-block-cd'));
+          const bDiff = bTarget - now;
+          if (bDiff <= 0) {
+            el.textContent = '🎉 ¡Tiempo cumplido!';
+            if (el.getAttribute('data-auto-open') === '1') {
+              const bid = el.getAttribute('data-bid');
+              const blk = STATE.blocks.find(b => b.id === bid);
+              if (blk && blk.state !== 'active') {
+                blk.state = 'active';
+                saveState(true);
+                renderUserBlocks();
+              }
+            }
+          } else {
+            const bd = Math.floor(bDiff / 86400000);
+            const bh = Math.floor((bDiff % 86400000) / 3600000);
+            const bm = Math.floor((bDiff % 3600000) / 60000);
+            const bs = Math.floor((bDiff % 60000) / 1000);
+            el.textContent = `⏳ ${bd}d ${String(bh).padStart(2, '0')}h ${String(bm).padStart(2, '0')}m ${String(bs).padStart(2, '0')}s`;
+          }
+        });
+      }
+
+      // ==================== ACCESO, ROLES Y TELEMETRÍA ULTRALIGERA ====================
+      function refreshAuthVisibility() {
+        const params = new URLSearchParams(window.location.search);
+        const forceElf = params.get('elfos') === '1';
+
+        document.getElementById('auth-screen').classList.remove('hidden');
+        document.getElementById('user-app').classList.add('hidden');
+        document.getElementById('admin-panel').classList.add('hidden');
+        document.getElementById('elf-top-bar').classList.add('hidden');
+        document.getElementById('sim-active-banner').classList.add('hidden');
+
+        if (forceElf) {
+          document.getElementById('elf-pin-panel').classList.remove('hidden');
+          document.getElementById('user-pin-panel').classList.add('hidden');
+          document.getElementById('pre-countdown-section').classList.add('hidden');
+          return;
+        }
+
+        document.getElementById('elf-pin-panel').classList.add('hidden');
+        if (STATE.preDelivery.active) {
+          document.getElementById('pre-countdown-section').classList.remove('hidden');
+          document.getElementById('user-pin-panel').classList.add('hidden');
+        } else {
+          document.getElementById('pre-countdown-section').classList.add('hidden');
+          document.getElementById('user-pin-panel').classList.remove('hidden');
+        }
+      }
+
+      function loginAsParticipant(participant, isSimulated = false) {
+        currentUser = participant;
+        if (!isSimulated) {
+          participant.logins = (participant.logins || 0) + 1;
+          participant.lastSeen = Date.now();
+          pushLightTelemetry(participant);
+        }
+
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('admin-panel').classList.add('hidden');
+        document.getElementById('user-app').classList.remove('hidden');
+
+        if (isSimulated) {
+          document.getElementById('elf-top-bar').classList.add('hidden');
+          document.getElementById('sim-active-banner').classList.remove('hidden');
+          document.getElementById('sim-banner-text').textContent = `👁️ Vista limpia de: ${participant.apodo}`;
+        } else {
+          document.getElementById('elf-top-bar').classList.add('hidden');
+          document.getElementById('sim-active-banner').classList.add('hidden');
+        }
+
+        document.getElementById('user-apodo-display').textContent = participant.apodo;
+        updateBottomNavVisibility();
+        switchUserView('home');
+        renderUserBlocks();
+        renderWallPosts();
+        renderUserDmSection();
+      }
+
+      function loginAsElf() {
+        isAdmin = true;
+        currentUser = null;
+        simulatingUser = null;
+        document.getElementById('auth-screen').classList.add('hidden');
+        document.getElementById('user-app').classList.add('hidden');
+        document.getElementById('sim-active-banner').classList.add('hidden');
+        document.getElementById('elf-top-bar').classList.remove('hidden');
+        document.getElementById('admin-panel').classList.remove('hidden');
+        populateSimDropdown();
+        renderAllAdminTabs();
+      }
+
+      function updateBottomNavVisibility() {
+        document.getElementById('nav-btn-wall').classList.toggle('hidden', !STATE.comm.wallEnabled);
+        document.getElementById('nav-btn-dm').classList.toggle('hidden', !STATE.comm.dmEnabled);
+      }
+
+      function switchUserView(view) {
+        ['home', 'wall', 'dm'].forEach(v => {
+          document.getElementById(`user-view-${v}`).classList.toggle('hidden', v !== view);
+        });
+        document.querySelectorAll('#bottom-nav .nav-btn[data-nav]').forEach(btn => {
+          btn.classList.toggle('active', btn.getAttribute('data-nav') === view);
+        });
+      }
+
+      function updateTopOnlineBadge() {
+        const now = Date.now();
+        const onlineCount = STATE.participants.filter(p => p.lastSeen && (now - p.lastSeen) < 300000).length;
+        document.getElementById('online-badge-top').textContent = `🟢 ${onlineCount} activos`;
+      }
+
+      // ==================== REGISTRO DE LECTURA QR / CÓDIGOS EN MATRIZ ====================
+      function getCardState(participant, blockId) {
+        if (!participant || !participant.cards) return '';
+        return participant.cards[blockId] || '';
+      }
+
+      function setCardState(participant, blockId, codeStr) {
+        if (!participant || simulatingUser) return;
+        if (!participant.cards) participant.cards = {};
+        participant.cards[blockId] = codeStr;
+        participant.lastSeen = Date.now();
+        pushLightTelemetry(participant);
+      }
+
+      function formatYouTubeEmbed(url) {
+        if (!url) return '';
+        const m = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|embed\/|shorts\/))([a-zA-Z0-9_-]{11})/);
+        return m ? `https://www.youtube.com/embed/${m[1]}` : url;
+      }
+
+      function renderUserBlocks() {
+        const container = document.getElementById('user-blocks-container');
+        container.innerHTML = '';
+        if (!currentUser) return;
+
+        const now = Date.now();
+
+        STATE.blocks.forEach(block => {
+          if (block.state === 'hidden') return;
+
+          let effectiveState = block.state;
+          let cdTargetMs = 0;
+          if (block.countdownEnabled && block.countdownTarget) {
+            cdTargetMs = new Date(block.countdownTarget).getTime();
+            if (cdTargetMs <= now && block.countdownAutoOpen && (effectiveState === 'soon' || effectiveState === 'locked')) {
+              effectiveState = 'active';
+              block.state = 'active';
+              saveState(true);
+            }
+          }
+
+          const cState = getCardState(currentUser, block.id);
+          if (effectiveState === 'active' && !cState) {
+            setCardState(currentUser, block.id, 'view');
+          }
+
+          const card = document.createElement('article');
+          card.className = 'card' + (block.isGold ? ' gold-card' : '');
+
+          const titleStyle = `font-size:${block.titleSize || STATE.theme.sizeTitle}px;${block.fontFamily ? `font-family:${block.fontFamily};` : ''}`;
+          const bodyStyle = `font-size:${block.bodySize || STATE.theme.sizeBody}px;${block.fontFamily ? `font-family:${block.fontFamily};` : ''}`;
+
+          let html = `
+            <h2 class="card-title" style="${titleStyle}">${escapeHtml(block.title)}</h2>
+            ${block.subtitle ? `<div style="font-size:13px;font-weight:700;color:var(--gold-light);margin-bottom:8px;">${escapeHtml(block.subtitle)}</div>` : ''}
+          `;
+
+          if (block.countdownEnabled && cdTargetMs > now) {
+            html += `
+              <div class="block-cd-bar">
+                <span>Cuenta atrás de misión:</span>
+                <span data-block-cd="${cdTargetMs}" data-auto-open="${block.countdownAutoOpen ? '1' : '0'}" data-bid="${block.id}">⏳ Calculando...</span>
+              </div>
+            `;
+          }
+
+          if (block.imageUrl) {
+            html += `<img src="${escapeHtml(block.imageUrl)}" alt="" style="width:100%;max-height:240px;object-fit:cover;border-radius:12px;margin:8px 0;border:1px solid var(--border-soft);">`;
+          }
+
+          if (block.videoBefore) {
+            html += `<div class="video-wrap"><iframe src="${escapeHtml(formatYouTubeEmbed(block.videoBefore))}" allowfullscreen></iframe></div>`;
+          }
+
+          html += `<p style="${bodyStyle};line-height:1.55;margin-bottom:12px;">${escapeHtml(block.body)}</p>`;
+
+          if (effectiveState === 'soon') {
+            html += `
+              <div class="soon-overlay">
+                <div class="soon-gift-badge">🎁</div>
+                <div style="font-family:var(--font-title);font-size:24px;color:#fffbeb;text-shadow:0 2px 6px rgba(0,0,0,0.6);">Próximamente</div>
+                <p style="font-size:13px;font-weight:700;color:#fef3c7;max-width:300px;margin-top:4px;text-shadow:0 1px 4px rgba(0,0,0,0.6);">
+                  ${escapeHtml(block.soonMessage || 'Esta sorpresa se desbloqueará muy pronto.')}
+                </p>
+              </div>
+            `;
+          }
+
+          const needsUnlock = (effectiveState === 'locked') || (block.qrType && block.qrType !== 'none');
+          const isUnlocked = cState.startsWith('ok');
+
+          if (effectiveState !== 'soon' && needsUnlock) {
+            if (isUnlocked) {
+              html += `<div style="background:rgba(22,163,74,0.28);border:1px solid #22c55e;padding:12px;border-radius:12px;margin-top:8px;">
+                <strong style="color:#86efac;">✅ ¡Código Verificado y Registrado!</strong>
+              </div>`;
+
+              if (block.qrType === 'envio') {
+                const targetUser = STATE.participants.find(p => p.id === currentUser.assignedToId);
+                if (targetUser) {
+                  const addrLines = formatPostalAddress(targetUser);
+                  html += `
+                    <div style="background:rgba(0,0,0,0.48);border:2px solid #fbbf24;border-radius:14px;padding:14px;margin-top:10px;">
+                      <div style="font-size:12px;text-transform:uppercase;letter-spacing:1px;color:#fde047;font-weight:800;">🎯 Tu Amigo Invisible Asignado</div>
+                      <div style="font-family:var(--font-title);font-size:28px;color:#fff;margin:4px 0;">🎅 ${escapeHtml(targetUser.apodo)}</div>
+                      <div style="font-size:13px;background:rgba(255,255,255,0.08);padding:10px;border-radius:10px;margin-top:6px;">
+                        <strong>📮 Dirección de entrega:</strong><br>
+                        ${addrLines.map(l => escapeHtml(l)).join('<br>')}
+                      </div>
+                      <div style="font-size:12px;color:#fde68a;margin-top:8px;font-weight:700;">
+                        ⚠️ Importante: Pon SIEMPRE como remitente del paquete a <strong>CRIS LA ELFA</strong> (nunca tu nombre ni tu dirección).
+                      </div>
+                    </div>
+                  `;
+                }
+              }
+
+              if (block.videoAfter) {
+                html += `<div style="margin-top:10px;font-size:12px;font-weight:700;color:var(--gold-light);">🎬 Vídeo Secreto Desbloqueado:</div>
+                <div class="video-wrap"><iframe src="${escapeHtml(formatYouTubeEmbed(block.videoAfter))}" allowfullscreen></iframe></div>`;
+              }
+            } else {
+              html += `<div style="background:rgba(0,0,0,0.32);border:1px solid var(--border-soft);padding:12px;border-radius:12px;margin-top:8px;">`;
+              if (block.qrType === 'envio' || block.qrType === 'recep') {
+                html += `<button type="button" class="btn btn-gold btn-block" data-scan-block="${block.id}">📷 Abrir Lector QR con Cámara</button>
+                <div style="text-align:center;font-size:11px;opacity:0.75;margin:8px 0;">— o introduce el código impreso bajo tu QR —</div>`;
+              }
+              html += `
+                <div style="display:flex;gap:8px;">
+                  <input type="text" id="unlock-inp-${block.id}" placeholder="Introduce el código aquí...">
+                  <button type="button" class="btn btn-primary" data-unlock-block="${block.id}">Validar</button>
+                </div>
+              </div>`;
+            }
+          }
+
+          card.innerHTML = html;
+          container.appendChild(card);
+        });
+
+        container.querySelectorAll('[data-scan-block]').forEach(btn => {
+          btn.addEventListener('click', () => openQrScanner(btn.getAttribute('data-scan-block')));
+        });
+        container.querySelectorAll('[data-unlock-block]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const bid = btn.getAttribute('data-unlock-block');
+            const val = (document.getElementById(`unlock-inp-${bid}`).value || '').trim();
+            validateBlockUnlock(bid, val);
+          });
+        });
+
+        updateAllCountdowns();
+      }
+
+      function validateBlockUnlock(blockId, rawCode) {
+        if (!currentUser) return;
+        const block = STATE.blocks.find(b => b.id === blockId);
+        if (!block) return;
+
+        const clean = rawCode.trim().toUpperCase();
+        if (!clean) {
+          showToast('Introduce un código o escanea el QR');
+          return;
+        }
+
+        let expected = '';
+        if (block.qrType === 'envio') expected = currentUser.codeEnvio.toUpperCase();
+        else if (block.qrType === 'recep') expected = currentUser.codeRecep.toUpperCase();
+        else expected = (block.secretKeyword || '').trim().toUpperCase();
+
+        const isMatch = expected && (clean === expected || clean.includes(expected));
+        const nowTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+
+        if (isMatch) {
+          setCardState(currentUser, block.id, `ok:${nowTime}`);
+          showToast('🎉 ¡Lectura QR verificada y marcada en el Panel!');
+          renderUserBlocks();
+        } else {
+          const prev = getCardState(currentUser, block.id);
+          const prevFails = prev.startsWith('err:') ? (Number(prev.split(':')[1]) || 0) : 0;
+          setCardState(currentUser, block.id, `err:${prevFails + 1}`);
+          showToast('❌ Código incorrecto. Revisa tu etiqueta e inténtalo de nuevo');
+        }
+      }
+
+      // ==================== ESCÁNER QR CON CÁMARA ====================
+      function openQrScanner(blockId) {
+        activeQrBlockId = blockId;
+        document.getElementById('qr-modal').classList.remove('hidden');
+
+        try {
+          html5QrInstance = new Html5Qrcode('qr-reader');
+          html5QrInstance.start(
+            { facingMode: 'environment' },
+            { fps: 10, qrbox: { width: 220, height: 220 } },
+            (decodedText) => {
+              closeQrScanner();
+              validateBlockUnlock(activeQrBlockId, decodedText);
+            },
+            () => {}
+          ).catch(() => {
+            showToast('No se pudo abrir la cámara. Usa el campo manual.');
+            closeQrScanner();
+          });
+        } catch (e) {
+          showToast('Escáner no disponible en este navegador. Usa el código manual.');
+          closeQrScanner();
+        }
+      }
+
+      function closeQrScanner() {
+        document.getElementById('qr-modal').classList.add('hidden');
+        if (html5QrInstance) {
+          html5QrInstance.stop().catch(() => {});
+          html5QrInstance = null;
+        }
+      }
+
+      // ==================== MURO Y BUZÓN PRIVADO ====================
+      function renderWallPosts() {
+        const list = document.getElementById('wall-posts-list');
+        list.innerHTML = '';
+        STATE.wallPosts.filter(p => !p.pending).forEach(post => {
+          const div = document.createElement('div');
+          div.className = 'card';
+          div.innerHTML = `
+            <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--gold-light);margin-bottom:6px;">
+              <strong>${escapeHtml(post.author)}</strong>
+              <span>${escapeHtml(post.time || '')}</span>
+            </div>
+            <p style="line-height:1.5;">${escapeHtml(post.text)}</p>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      function renderUserDmSection() {
+        if (!currentUser) return;
+        const sel = document.getElementById('dm-recipient-select');
+        sel.innerHTML = '<option value="La Elfa Cris">🧝‍♀️ La Elfa Cris (Organización)</option>';
+        STATE.participants.forEach(p => {
+          if (p.id !== currentUser.id) {
+            const opt = document.createElement('option');
+            opt.value = p.apodo;
+            opt.textContent = `🎅 ${p.apodo}`;
+            sel.appendChild(opt);
+          }
+        });
+
+        const inbox = document.getElementById('user-dm-inbox');
+        const myMsgs = STATE.messages.filter(m => m.status === 'approved' && m.toApodo === currentUser.apodo);
+        if (!myMsgs.length) {
+          inbox.innerHTML = '<p style="font-size:13px;opacity:0.75;">Aún no tienes mensajes aprobados en tu buzón.</p>';
+          return;
+        }
+        inbox.innerHTML = myMsgs.map(m => `
+          <div style="background:rgba(0,0,0,0.3);border:1px solid var(--border-soft);border-radius:12px;padding:10px;margin-bottom:8px;">
+            <div style="font-size:12px;color:var(--gold-light);font-weight:700;">De: ${m.anonymous ? '🎭 Duende Anónimo' : escapeHtml(m.fromApodo)} · ${escapeHtml(m.time)}</div>
+            <div style="margin-top:4px;">${escapeHtml(m.text)}</div>
+          </div>
+        `).join('');
+      }
+
+      // ==================== PANEL MAESTRO ADMIN (7 MÓDULOS) ====================
+      function renderAllAdminTabs() {
+        updateTopOnlineBadge();
+        renderTab1Elfs();
+        renderTab2Participants();
+        renderTab3Blocks();
+        renderTab4PreDelivery();
+        renderTab5Design();
+        renderTab6CardsStudio();
+        renderTab7Sheets();
+      }
+
+      function populateSimDropdown() {
+        const sel = document.getElementById('sim-user-select');
+        sel.innerHTML = '<option value="">👁️ Ver como Duende...</option>';
+        STATE.participants.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.id;
+          opt.textContent = `👁️ ${p.apodo} (PIN: ${p.pin})`;
+          sel.appendChild(opt);
+        });
+      }
+
+      function renderTab1Elfs() {
+        document.getElementById('cfg-wall-enabled').checked = STATE.comm.wallEnabled;
+        document.getElementById('cfg-dm-enabled').checked = STATE.comm.dmEnabled;
+        document.getElementById('cfg-wall-mod').checked = STATE.comm.wallModeration;
+        document.getElementById('cfg-elfa-pin').value = STATE.elfPins.elfa;
+        document.getElementById('cfg-elfo-pin').value = STATE.elfPins.elfo;
+
+        const baseUrl = getLiveBaseUrl();
+        const elfUrl = baseUrl + (baseUrl.includes('?') ? '&elfos=1' : '?elfos=1');
+        new QRious({
+          element: document.getElementById('elf-master-qr-canvas'),
+          value: elfUrl,
+          size: 120,
+          foreground: '#7f1d1d'
+        });
+
+        const qList = document.getElementById('moderation-queue-list');
+        const pendingMsgs = STATE.messages.filter(m => m.status === 'pending');
+        if (!pendingMsgs.length) {
+          qList.innerHTML = '<p style="font-size:13px;opacity:0.75;">✅ No hay mensajes pendientes de moderación.</p>';
+          return;
+        }
+
+        qList.innerHTML = '';
+        pendingMsgs.forEach(msg => {
+          const senderObj = STATE.participants.find(p => p.id === msg.fromId);
+          const targetObj = STATE.participants.find(p => p.apodo === msg.toApodo);
+          const isSpoilerRisk = senderObj && targetObj && senderObj.assignedToId === targetObj.id;
+
+          const item = document.createElement('div');
+          item.style.cssText = 'background:rgba(0,0,0,0.38);border:1px solid var(--border-soft);border-radius:12px;padding:12px;margin-bottom:10px;';
+          item.innerHTML = `
+            ${isSpoilerRisk ? `<div class="spoiler-banner">🚨 ALERTA ANTI-SPOILER: ¡${escapeHtml(msg.fromApodo)} es el Amigo Invisible de ${escapeHtml(msg.toApodo)}! Revisa que no se delate.</div>` : ''}
+            <div style="font-size:12px;color:var(--gold-light);font-weight:700;">
+              De: ${escapeHtml(msg.fromApodo)} ${msg.anonymous ? '(Modo Anónimo)' : ''} ➡️ Para: ${escapeHtml(msg.toApodo)}
+            </div>
+            <p style="margin:6px 0;background:rgba(255,255,255,0.06);padding:8px;border-radius:8px;">${escapeHtml(msg.text)}</p>
+            <div style="display:flex;gap:8px;">
+              <button type="button" class="btn btn-green btn-sm" data-mod-approve="${msg.id}">✅ Aprobar y Entregar</button>
+              <button type="button" class="btn btn-danger btn-sm" data-mod-reject="${msg.id}">🗑️ Rechazar</button>
+            </div>
+          `;
+          qList.appendChild(item);
+        });
+
+        qList.querySelectorAll('[data-mod-approve]').forEach(b => {
+          b.addEventListener('click', () => {
+            const m = STATE.messages.find(x => x.id === b.getAttribute('data-mod-approve'));
+            if (m) { m.status = 'approved'; saveState(true); renderTab1Elfs(); showToast('✅ Mensaje aprobado y entregado'); }
+          });
+        });
+        qList.querySelectorAll('[data-mod-reject]').forEach(b => {
+          b.addEventListener('click', () => {
+            STATE.messages = STATE.messages.filter(x => x.id !== b.getAttribute('data-mod-reject'));
+            saveState(true); renderTab1Elfs(); showToast('🗑️ Mensaje rechazado');
+          });
+        });
+      }
+
+      // TAB 2: Participantes, Telemetría Ultraligera, Matriz y WhatsApp
+      function renderTab2Participants() {
+        const now = Date.now();
+        const onlineCount = STATE.participants.filter(p => p.lastSeen && (now - p.lastSeen) < 300000).length;
+        const enteredCount = STATE.participants.filter(p => (p.logins || 0) > 0).length;
+        const envioDone = STATE.participants.filter(p => getCardState(p, 'core_gold_envio').startsWith('ok')).length;
+        const recepDone = STATE.participants.filter(p => getCardState(p, 'core_gold_recepcion').startsWith('ok')).length;
+
+        document.getElementById('telemetry-summary-cards').innerHTML = `
+          <div style="background:rgba(0,0,0,0.35);padding:10px;border-radius:12px;text-align:center;border:1px solid #22c55e;">
+            <div style="font-size:22px;font-weight:800;color:#86efac;">${onlineCount} / 22</div>
+            <div style="font-size:11px;">🟢 Activos (<5m)</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);padding:10px;border-radius:12px;text-align:center;border:1px solid var(--gold);">
+            <div style="font-size:22px;font-weight:800;color:var(--gold-light);">${enteredCount} / 22</div>
+            <div style="font-size:11px;">🔑 Han entrado</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);padding:10px;border-radius:12px;text-align:center;border:1px solid #fbbf24;">
+            <div style="font-size:22px;font-weight:800;color:#fde047;">${envioDone} / 22</div>
+            <div style="font-size:11px;">✨ QR Envío Leído</div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);padding:10px;border-radius:12px;text-align:center;border:1px solid #60a5fa;">
+            <div style="font-size:22px;font-weight:800;color:#93c5fd;">${recepDone} / 22</div>
+            <div style="font-size:11px;">🎁 QR Recepción Leído</div>
+          </div>
+        `;
+
+        renderParticipantsMatrix();
+        document.getElementById('cfg-wa-template').value = STATE.waTemplate;
+
+        const list = document.getElementById('participants-editor-list');
+        list.innerHTML = '';
+        STATE.participants.forEach(p => {
+          const card = document.createElement('div');
+          card.style.cssText = 'background:rgba(0,0,0,0.3);border:1px solid var(--border-soft);border-radius:14px;padding:12px;margin-bottom:12px;';
+
+          const optionsHtml = STATE.participants.filter(x => x.id !== p.id).map(x =>
+            `<option value="${x.id}" ${x.id === p.assignedToId ? 'selected' : ''}>${escapeHtml(x.apodo)}</option>`
+          ).join('');
+
+          card.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+              <strong style="color:var(--gold-light);font-size:15px;">#${p.id} · ${escapeHtml(p.apodo)} (PIN: ${escapeHtml(p.pin)})</strong>
+              <button type="button" class="btn btn-wa btn-sm" data-wa-user="${p.id}">📲 WhatsApp Privado</button>
+            </div>
+            <div class="grid-3">
+              <div><label>Apodo (Público en App):</label><input type="text" data-ufield="apodo" data-uid="${p.id}" value="${escapeHtml(p.apodo)}"></div>
+              <div><label>Nombre y Apellidos (Solo Correos/WA):</label><input type="text" data-ufield="nombreCompleto" data-uid="${p.id}" value="${escapeHtml(p.nombreCompleto)}"></div>
+              <div><label>Teléfono WhatsApp:</label><input type="tel" data-ufield="telefono" data-uid="${p.id}" value="${escapeHtml(p.telefono)}"></div>
+            </div>
+            <div class="grid-4">
+              <div><label>PIN (4 dígitos):</label><input type="text" maxlength="4" data-ufield="pin" data-uid="${p.id}" value="${escapeHtml(p.pin)}"></div>
+              <div><label>Código Envío:</label><input type="text" data-ufield="codeEnvio" data-uid="${p.id}" value="${escapeHtml(p.codeEnvio)}"></div>
+              <div><label>Código Recepción:</label><input type="text" data-ufield="codeRecep" data-uid="${p.id}" value="${escapeHtml(p.codeRecep)}"></div>
+              <div><label>Regala a (Amigo Invisible):</label><select data-ufield="assignedToId" data-uid="${p.id}">${optionsHtml}</select></div>
+            </div>
+            <div style="margin-top:8px;font-size:11px;font-weight:700;color:var(--gold-light);">📮 Dirección Postal (8 campos):</div>
+            <div class="grid-4">
+              <div style="grid-column:span 2;"><label>Calle / Vía:</label><input type="text" data-ufield="calle" data-uid="${p.id}" value="${escapeHtml(p.calle)}"></div>
+              <div><label>Número:</label><input type="text" data-ufield="numero" data-uid="${p.id}" value="${escapeHtml(p.numero)}"></div>
+              <div><label>Portal:</label><input type="text" data-ufield="portal" data-uid="${p.id}" value="${escapeHtml(p.portal)}"></div>
+            </div>
+            <div class="grid-4">
+              <div><label>Piso:</label><input type="text" data-ufield="piso" data-uid="${p.id}" value="${escapeHtml(p.piso)}"></div>
+              <div><label>Puerta:</label><input type="text" data-ufield="puerta" data-uid="${p.id}" value="${escapeHtml(p.puerta)}"></div>
+              <div><label>Código Postal:</label><input type="text" data-ufield="cp" data-uid="${p.id}" value="${escapeHtml(p.cp)}"></div>
+              <div><label>Ciudad:</label><input type="text" data-ufield="ciudad" data-uid="${p.id}" value="${escapeHtml(p.ciudad)}"></div>
+            </div>
+            <div class="grid-2">
+              <div><label>Provincia:</label><input type="text" data-ufield="provincia" data-uid="${p.id}" value="${escapeHtml(p.provincia)}"></div>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+
+        list.querySelectorAll('[data-ufield]').forEach(inp => {
+          inp.addEventListener('change', () => {
+            const uid = Number(inp.getAttribute('data-uid'));
+            const field = inp.getAttribute('data-ufield');
+            const p = STATE.participants.find(x => x.id === uid);
+            if (!p) return;
+            p[field] = field === 'assignedToId' ? Number(inp.value) : inp.value;
+            saveState(true);
+            populateSimDropdown();
+            showToast(`💾 Guardado: ${p.apodo}`);
+          });
+        });
+
+        list.querySelectorAll('[data-wa-user]').forEach(btn => {
+          btn.addEventListener('click', () => openWhatsAppForUser(Number(btn.getAttribute('data-wa-user'))));
+        });
+      }
+
+      function renderParticipantsMatrix() {
+        const filter = document.getElementById('matrix-filter-status').value;
+        const table = document.getElementById('participants-matrix-table');
+        const now = Date.now();
+        const visibleBlocks = STATE.blocks.filter(b => b.state !== 'hidden');
+
+        let filteredUsers = STATE.participants;
+        if (filter === 'online') {
+          filteredUsers = filteredUsers.filter(p => p.lastSeen && (now - p.lastSeen) < 300000);
+        } else if (filter === 'pending_envio') {
+          filteredUsers = filteredUsers.filter(p => !getCardState(p, 'core_gold_envio').startsWith('ok'));
+        } else if (filter === 'pending_recep') {
+          filteredUsers = filteredUsers.filter(p => !getCardState(p, 'core_gold_recepcion').startsWith('ok'));
+        }
+
+        let thead = `<thead><tr>
+          <th>Participante (Apodo)</th>
+          <th>Estado Conexión</th>
+          <th>Accesos</th>
+          ${visibleBlocks.map(b => `<th>${escapeHtml(b.title.slice(0, 22))}</th>`).join('')}
+          <th>Acción</th>
+        </tr></thead>`;
+
+        let tbody = '<tbody>' + filteredUsers.map(p => {
+          const isOnline = p.lastSeen && (now - p.lastSeen) < 300000;
+          const lastStr = p.lastSeen ? new Date(p.lastSeen).toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }) : 'Nunca';
+
+          const cols = visibleBlocks.map(b => {
+            const val = getCardState(p, b.id);
+            if (val.startsWith('ok')) {
+              const t = val.split(':')[1] || '';
+              return `<td>
+                <span class="status-pill st-done">✅ Leído ${t}</span>
+                <button type="button" class="btn btn-xs btn-outline" data-reset-cell="${p.id}|${b.id}" title="Reiniciar estado">↺</button>
+              </td>`;
+            } else if (val.startsWith('err:')) {
+              const fails = val.split(':')[1] || '1';
+              return `<td><span class="status-pill st-fail">⚠️ ${fails} fallo(s)</span></td>`;
+            } else if (val === 'view') {
+              return `<td><span class="status-pill st-seen">👁️ Vista</span></td>`;
+            }
+            return `<td><span class="status-pill st-wait">⏳ Pendiente</span></td>`;
+          }).join('');
+
+          return `<tr>
+            <td><strong>${escapeHtml(p.apodo)}</strong><br><span style="font-size:10px;opacity:0.7;">PIN: ${escapeHtml(p.pin)}</span></td>
+            <td>
+              <span class="status-pill ${isOnline ? 'st-online' : 'st-offline'}">${isOnline ? '🟢 Online' : '⚪ Offline'}</span>
+              <div style="font-size:10px;opacity:0.75;margin-top:2px;">Últ.: ${lastStr}</div>
+            </td>
+            <td style="font-weight:800;text-align:center;">${p.logins || 0}</td>
+            ${cols}
+            <td><button type="button" class="btn btn-wa btn-sm" data-matrix-wa="${p.id}">📲 WA</button></td>
+          </tr>`;
+        }).join('') + '</tbody>';
+
+        table.innerHTML = thead + tbody;
+        table.querySelectorAll('[data-matrix-wa]').forEach(btn => {
+          btn.addEventListener('click', () => openWhatsAppForUser(Number(btn.getAttribute('data-matrix-wa'))));
+        });
+        table.querySelectorAll('[data-reset-cell]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const [uidStr, bid] = btn.getAttribute('data-reset-cell').split('|');
+            const user = STATE.participants.find(x => x.id === Number(uidStr));
+            if (user && user.cards) {
+              delete user.cards[bid];
+              saveState(true);
+              renderTab2Participants();
+              showToast('↺ Celda reiniciada');
+            }
+          });
+        });
+      }
+
+      function openWhatsAppForUser(uid) {
+        const p = STATE.participants.find(x => x.id === uid);
+        if (!p) return;
+        let cleanPhone = (p.telefono || '').replace(/\D/g, '');
+        if (cleanPhone.length === 9) cleanPhone = '34' + cleanPhone;
+        const baseUrl = getLiveBaseUrl();
+        const msg = STATE.waTemplate
+          .replace(/\{apodo\}/g, p.apodo)
+          .replace(/\{nombre\}/g, p.nombreCompleto)
+          .replace(/\{pin\}/g, p.pin)
+          .replace(/\{url\}/g, baseUrl);
+        window.open(`https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`, '_blank');
+      }
+
+      function runSecretSantaDraw() {
+        const ids = STATE.participants.map(p => p.id);
+        for (let i = ids.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [ids[i], ids[j]] = [ids[j], ids[i]];
+        }
+        for (let i = 0; i < ids.length; i++) {
+          const giver = STATE.participants.find(p => p.id === ids[i]);
+          if (giver) giver.assignedToId = ids[(i + 1) % ids.length];
+        }
+        saveState(true);
+        renderTab2Participants();
+        showToast('🎲 ¡Sorteo completado! Ciclo único sin parejas cruzadas.');
+      }
+
+      // TAB 3: Bloques
+      function renderTab3Blocks() {
+        const list = document.getElementById('admin-blocks-list');
+        list.innerHTML = '';
+
+        STATE.blocks.forEach((b, idx) => {
+          const card = document.createElement('div');
+          card.className = 'card' + (b.isGold ? ' gold-card' : '');
+          card.innerHTML = `
+            <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:8px;">
+              <div>
+                <strong>${b.protected ? '🛡️ BLOQUE DORADO PROTEGIDO' : `Bloque #${idx + 1}`}</strong>
+              </div>
+              <div style="display:flex;gap:6px;">
+                <button type="button" class="btn btn-outline btn-sm" data-dup-block="${b.id}">📋 Duplicar</button>
+                ${b.protected ? '' : `<button type="button" class="btn btn-danger btn-sm" data-del-block="${b.id}">🗑️ Eliminar</button>`}
+              </div>
+            </div>
+
+            <div class="grid-3">
+              <div>
+                <label>Estado del Bloque (4 estados):</label>
+                <select data-bfield="state" data-bid="${b.id}">
+                  <option value="active" ${b.state === 'active' ? 'selected' : ''}>🟢 Visible (Activo)</option>
+                  <option value="hidden" ${b.state === 'hidden' ? 'selected' : ''}>🙈 Oculto</option>
+                  <option value="soon" ${b.state === 'soon' ? 'selected' : ''}>🎁 Próximamente (Capa dorada + regalo)</option>
+                  <option value="locked" ${b.state === 'locked' ? 'selected' : ''}>🔒 Bloqueado / Secreto</option>
+                </select>
+              </div>
+              <div>
+                <label>Tipo de Validación / QR:</label>
+                <select data-bfield="qrType" data-bid="${b.id}">
+                  <option value="none" ${b.qrType === 'none' ? 'selected' : ''}>Sin código (informativo)</option>
+                  <option value="envio" ${b.qrType === 'envio' ? 'selected' : ''}>✨ QR Envío Sobre Dorado (E-xxx)</option>
+                  <option value="recep" ${b.qrType === 'recep' ? 'selected' : ''}>🎁 QR Recepción Paquete (R-xxx)</option>
+                  <option value="keyword" ${b.qrType === 'keyword' ? 'selected' : ''}>🔑 Palabra Clave Secreta</option>
+                </select>
+              </div>
+              <div>
+                <label>Palabra Clave (si aplica):</label>
+                <input type="text" data-bfield="secretKeyword" data-bid="${b.id}" value="${escapeHtml(b.secretKeyword || '')}" placeholder="Ej: POLONORTE">
+              </div>
+            </div>
+
+            <div class="grid-2">
+              <div><label>Título:</label><input type="text" data-bfield="title" data-bid="${b.id}" value="${escapeHtml(b.title)}"></div>
+              <div><label>Subtítulo:</label><input type="text" data-bfield="subtitle" data-bid="${b.id}" value="${escapeHtml(b.subtitle || '')}"></div>
+            </div>
+
+            <label>Texto / Instrucciones:</label>
+            <textarea data-bfield="body" data-bid="${b.id}">${escapeHtml(b.body)}</textarea>
+
+            <label>Mensaje sobre la capa dorada (Estado "Próximamente"):</label>
+            <input type="text" data-bfield="soonMessage" data-bid="${b.id}" value="${escapeHtml(b.soonMessage || '')}">
+
+            <div class="grid-3">
+              <div><label>Imagen URL (opcional):</label><input type="url" data-bfield="imageUrl" data-bid="${b.id}" value="${escapeHtml(b.imageUrl || '')}"></div>
+              <div><label>Vídeo Antes (YouTube URL):</label><input type="url" data-bfield="videoBefore" data-bid="${b.id}" value="${escapeHtml(b.videoBefore || '')}"></div>
+              <div><label>Vídeo Después (al desbloquear):</label><input type="url" data-bfield="videoAfter" data-bid="${b.id}" value="${escapeHtml(b.videoAfter || '')}"></div>
+            </div>
+
+            <div class="grid-4">
+              <div>
+                <label>Fuente Bloque:</label>
+                <select data-bfield="fontFamily" data-bid="${b.id}">
+                  <option value="" ${!b.fontFamily ? 'selected' : ''}>Global por defecto</option>
+                  <option value="'Mountains of Christmas', cursive" ${b.fontFamily === "'Mountains of Christmas', cursive" ? 'selected' : ''}>Mountains of Christmas</option>
+                  <option value="'Cinzel', serif" ${b.fontFamily === "'Cinzel', serif" ? 'selected' : ''}>Cinzel</option>
+                  <option value="'Playfair Display', serif" ${b.fontFamily === "'Playfair Display', serif" ? 'selected' : ''}>Playfair Display</option>
+                  <option value="'Poppins', sans-serif" ${b.fontFamily === "'Poppins', sans-serif" ? 'selected' : ''}>Poppins</option>
+                </select>
+              </div>
+              <div><label>Tam. Título (px):</label><input type="number" data-bfield="titleSize" data-bid="${b.id}" value="${b.titleSize || 22}"></div>
+              <div><label>Tam. Texto (px):</label><input type="number" data-bfield="bodySize" data-bid="${b.id}" value="${b.bodySize || 15}"></div>
+              <div style="display:flex;align-items:flex-end;">
+                <label style="margin:0;display:flex;align-items:center;gap:6px;cursor:pointer;">
+                  <input type="checkbox" data-bfield="isGold" data-bid="${b.id}" ${b.isGold ? 'checked' : ''}> ✨ Estilo Dorado
+                </label>
+              </div>
+            </div>
+
+            <div class="switch-row">
+              <div style="flex:1;">
+                <strong>⏳ Cuenta Atrás Individual del Bloque</strong>
+                <div class="grid-2" style="margin-top:6px;">
+                  <input type="datetime-local" data-bfield="countdownTarget" data-bid="${b.id}" value="${escapeHtml(b.countdownTarget || '')}">
+                  <label style="margin:0;display:flex;align-items:center;gap:6px;">
+                    <input type="checkbox" data-bfield="countdownAutoOpen" data-bid="${b.id}" ${b.countdownAutoOpen ? 'checked' : ''}> Abrir auto al llegar a 0
+                  </label>
+                </div>
+              </div>
+              <input type="checkbox" data-bfield="countdownEnabled" data-bid="${b.id}" ${b.countdownEnabled ? 'checked' : ''}>
+            </div>
+          `;
+          list.appendChild(card);
+        });
+
+        list.querySelectorAll('[data-bfield]').forEach(el => {
+          el.addEventListener('change', () => {
+            const bid = el.getAttribute('data-bid');
+            const field = el.getAttribute('data-bfield');
+            const blk = STATE.blocks.find(x => x.id === bid);
+            if (!blk) return;
+            blk[field] = el.type === 'checkbox' ? el.checked : (el.type === 'number' ? Number(el.value) : el.value);
+            saveState(true);
+            if (field === 'isGold') renderTab3Blocks();
+            showToast('💾 Bloque actualizado');
+          });
+        });
+
+        list.querySelectorAll('[data-dup-block]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const orig = STATE.blocks.find(x => x.id === btn.getAttribute('data-dup-block'));
+            if (!orig) return;
+            const copy = JSON.parse(JSON.stringify(orig));
+            copy.id = 'block_' + Date.now();
+            copy.protected = false;
+            copy.title = copy.title + ' (Copia)';
+            STATE.blocks.push(copy);
+            saveState(true);
+            renderTab3Blocks();
+            showToast('📋 Bloque duplicado');
+          });
+        });
+
+        list.querySelectorAll('[data-del-block]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            STATE.blocks = STATE.blocks.filter(x => x.id !== btn.getAttribute('data-del-block'));
+            saveState(true);
+            renderTab3Blocks();
+            showToast('🗑️ Bloque eliminado');
+          });
+        });
+      }
+
+      // TAB 4: Portada Pre-Entrega
+      function renderTab4PreDelivery() {
+        const pre = STATE.preDelivery;
+        document.getElementById('cfg-pre-active').checked = pre.active;
+        document.getElementById('cfg-pre-target').value = pre.targetDate;
+        document.getElementById('cfg-pre-font').value = pre.fontFamily;
+        document.getElementById('cfg-pre-title').value = pre.title;
+        document.getElementById('cfg-pre-subtitle').value = pre.subtitle;
+        document.getElementById('cfg-pre-clue').value = pre.clue;
+        document.getElementById('cfg-pre-title-size').value = pre.titleSize;
+        document.getElementById('cfg-pre-bg').value = pre.bgColor;
+        document.getElementById('cfg-pre-box-bg').value = pre.boxBgColor;
+        document.getElementById('cfg-pre-avatar-url').value = pre.avatarUrl && !pre.avatarUrl.startsWith('data:') ? pre.avatarUrl : '';
+        document.getElementById('cfg-pre-top-gif').value = pre.topGifUrl && !pre.topGifUrl.startsWith('data:') ? pre.topGifUrl : '';
+        document.getElementById('cfg-pre-bot-gif').value = pre.bottomGifUrl && !pre.bottomGifUrl.startsWith('data:') ? pre.bottomGifUrl : '';
+      }
+
+      // TAB 5: Cabecera, Diseño y Lluvia
+      function renderTab5Design() {
+        const hdr = STATE.header;
+        document.getElementById('cfg-hdr-title').value = hdr.title;
+        document.getElementById('cfg-hdr-sub').value = hdr.subtitle;
+        document.getElementById('cfg-hdr-font').value = hdr.fontFamily;
+        document.getElementById('cfg-hdr-title-size').value = hdr.titleSize;
+        document.getElementById('cfg-hdr-sub-size').value = hdr.subSize;
+        document.getElementById('cfg-hdr-bg1').value = hdr.bg1;
+        document.getElementById('cfg-hdr-bg2').value = hdr.bg2;
+        document.getElementById('cfg-hdr-border').value = hdr.borderColor;
+        document.getElementById('cfg-hdr-tcolor').value = hdr.titleColor;
+        document.getElementById('cfg-hdr-media-url').value = hdr.mediaUrl && !hdr.mediaUrl.startsWith('data:') ? hdr.mediaUrl : '';
+        document.getElementById('cfg-hdr-media-mode').value = hdr.mediaMode;
+
+        document.getElementById('cfg-fx-enabled').checked = STATE.particles.enabled;
+        document.getElementById('cfg-fx-chars').value = STATE.particles.chars;
+        document.getElementById('cfg-fx-count').value = STATE.particles.count;
+        document.getElementById('cfg-fx-speed').value = STATE.particles.speed;
+
+        document.getElementById('cfg-col-bg').value = STATE.theme.bgMain;
+        document.getElementById('cfg-col-card').value = STATE.theme.bgCard;
+        document.getElementById('cfg-col-gold').value = STATE.theme.gold;
+        document.getElementById('cfg-col-text').value = STATE.theme.textMain;
+        document.getElementById('cfg-font-title').value = STATE.theme.fontTitle;
+        document.getElementById('cfg-size-title').value = STATE.theme.sizeTitle;
+        document.getElementById('cfg-size-body').value = STATE.theme.sizeBody;
+      }
+
+      // TAB 6: Estudio Gráfico de Tarjetas y Etiquetas Correos
+      function renderTab6CardsStudio() {
+        const s = STATE.fixedSender;
+        document.getElementById('sender-calle').value = s.calle;
+        document.getElementById('sender-numero').value = s.numero;
+        document.getElementById('sender-portal').value = s.portal;
+        document.getElementById('sender-piso').value = s.piso;
+        document.getElementById('sender-puerta').value = s.puerta;
+        document.getElementById('sender-cp').value = s.cp;
+        document.getElementById('sender-ciudad').value = s.ciudad;
+        document.getElementById('sender-provincia').value = s.provincia;
+
+        const userSel = document.getElementById('pdf-sample-user');
+        userSel.innerHTML = STATE.participants.map(p => `<option value="${p.id}">#${p.id} · ${escapeHtml(p.apodo)} (${escapeHtml(p.nombreCompleto)})</option>`).join('');
+
+        loadCardStyleInputs();
+        drawCardPreviewCanvas();
+      }
+
+      function loadCardStyleInputs() {
+        const fmt = document.getElementById('pdf-format-select').value;
+        const st = STATE.cardStyles[fmt];
+        document.getElementById('card-style-bg').value = st.bg;
+        document.getElementById('card-style-border').value = st.border;
+        document.getElementById('card-style-text').value = st.text;
+        document.getElementById('card-style-title').value = st.title;
+        document.getElementById('card-style-sub').value = st.sub;
+        document.getElementById('card-style-footer').value = st.footer;
+      }
+
+      function renderCardToCanvas(canvas, fmt, participant) {
+        const ctx = canvas.getContext('2d');
+        const W = canvas.width;
+        const H = canvas.height;
+        const st = STATE.cardStyles[fmt];
+        const baseUrl = getLiveBaseUrl();
+
+        ctx.clearRect(0, 0, W, H);
+        ctx.fillStyle = st.bg;
+        ctx.fillRect(0, 0, W, H);
+
+        const drawOverlays = () => {
+          ctx.strokeStyle = st.border;
+          ctx.lineWidth = 8;
+          ctx.strokeRect(12, 12, W - 24, H - 24);
+          ctx.lineWidth = 2;
+          ctx.strokeRect(22, 22, W - 44, H - 44);
+
+          if (fmt === 'correos') {
+            ctx.fillStyle = 'rgba(30, 58, 138, 0.08)';
+            ctx.fillRect(32, 32, 270, 125);
+            ctx.strokeStyle = st.border;
+            ctx.lineWidth = 1.5;
+            ctx.strokeRect(32, 32, 270, 125);
+
+            ctx.fillStyle = st.border;
+            ctx.font = 'bold 12px Poppins, sans-serif';
+            ctx.fillText('REMITENTE OFICIAL:', 42, 52);
+            ctx.fillStyle = st.text;
+            ctx.font = 'bold 14px Poppins, sans-serif';
+            ctx.fillText('CRIS LA ELFA', 42, 72);
+            ctx.font = '12px Poppins, sans-serif';
+            formatPostalAddress(STATE.fixedSender).forEach((line, idx) => {
+              ctx.fillText(line, 42, 92 + idx * 17);
+            });
+
+            ctx.strokeStyle = '#b91c1c';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(W - 125, 34, 90, 68);
+            ctx.fillStyle = '#b91c1c';
+            ctx.font = 'bold 11px Poppins, sans-serif';
+            ctx.fillText('POLO NORTE', W - 116, 56);
+            ctx.fillText('CORREO REAL', W - 118, 74);
+            ctx.fillText('2026 🎄', W - 102, 92);
+
+            ctx.fillStyle = 'rgba(245, 158, 11, 0.12)';
+            ctx.fillRect(140, 185, W - 175, 175);
+            ctx.strokeStyle = st.border;
+            ctx.strokeRect(140, 185, W - 175, 175);
+
+            ctx.fillStyle = st.border;
+            ctx.font = 'bold 13px Poppins, sans-serif';
+            ctx.fillText('DESTINATARIO:', 156, 210);
+            ctx.fillStyle = st.text;
+            ctx.font = 'bold 18px Poppins, sans-serif';
+            ctx.fillText(participant.nombreCompleto, 156, 236);
+            ctx.font = '15px Poppins, sans-serif';
+            formatPostalAddress(participant).forEach((line, idx) => {
+              ctx.fillText(line, 156, 264 + idx * 24);
+            });
+            return;
+          }
+
+          ctx.fillStyle = st.text;
+          ctx.textAlign = 'center';
+          ctx.font = 'bold 22px Cinzel, serif';
+          ctx.fillText(st.title, W / 2, 64);
+
+          ctx.fillStyle = st.border;
+          ctx.font = 'bold 14px Poppins, sans-serif';
+          ctx.fillText(st.sub, W / 2, 90);
+
+          const qrCanvas = document.createElement('canvas');
+          let qrVal = baseUrl;
+          if (fmt === 'dorado') qrVal = participant.codeRecep;
+          else if (fmt === 'miniqr') qrVal = participant.codeEnvio;
+
+          new QRious({ element: qrCanvas, value: qrVal, size: 150, foreground: '#111827' });
+
+          if (fmt === 'miniqr') {
+            const qr2 = document.createElement('canvas');
+            new QRious({ element: qr2, value: participant.codeRecep, size: 150, foreground: '#7f1d1d' });
+
+            ctx.drawImage(qrCanvas, 115, 115, 140, 140);
+            ctx.drawImage(qr2, 345, 115, 140, 140);
+
+            ctx.fillStyle = st.text;
+            ctx.font = 'bold 16px Poppins, sans-serif';
+            ctx.fillText(`ENVÍO: ${participant.codeEnvio}`, 185, 280);
+            ctx.fillText(`RECEPCIÓN: ${participant.codeRecep}`, 415, 280);
+            ctx.font = '13px Poppins, sans-serif';
+            ctx.fillText(`Duende: ${participant.apodo}`, W / 2, 315);
+          } else {
+            ctx.drawImage(qrCanvas, W / 2 - 70, 108, 140, 140);
+            ctx.fillStyle = st.text;
+            ctx.font = 'bold 22px Poppins, sans-serif';
+            ctx.fillText(`🎅 ${participant.apodo}`, W / 2, 282);
+
+            if (fmt === 'carta') {
+              ctx.fillStyle = st.border;
+              ctx.font = 'bold 18px Poppins, sans-serif';
+              ctx.fillText(`🔑 PIN SECRETO: ${participant.pin}`, W / 2, 312);
+            } else if (fmt === 'dorado') {
+              ctx.fillStyle = st.border;
+              ctx.font = 'bold 16px Poppins, sans-serif';
+              ctx.fillText(`Código Precinto: ${participant.codeRecep}`, W / 2, 312);
+            } else if (fmt === 'portable') {
+              ctx.font = '12px Poppins, sans-serif';
+              ctx.fillText('(Tarjeta sin PIN · Usa el PIN de tu carta)', W / 2, 310);
+            }
+          }
+
+          ctx.fillStyle = st.text;
+          ctx.font = '12px Poppins, sans-serif';
+          ctx.fillText(st.footer.slice(0, 68), W / 2, H - 38);
+          ctx.textAlign = 'left';
+        };
+
+        if (st.customPng) {
+          const img = new Image();
+          img.onload = () => {
+            ctx.drawImage(img, 0, 0, W, H);
+            drawOverlays();
+          };
+          img.src = st.customPng;
+        } else {
+          drawOverlays();
+        }
+      }
+
+      function drawCardPreviewCanvas() {
+        const canvas = document.getElementById('card-preview-canvas');
+        const fmt = document.getElementById('pdf-format-select').value;
+        const uid = Number(document.getElementById('pdf-sample-user').value) || 1;
+        const p = STATE.participants.find(x => x.id === uid) || STATE.participants[0];
+        renderCardToCanvas(canvas, fmt, p);
+      }
+
+      function generateCardsPdf(singleOnly = false) {
+        if (!window.jspdf || !window.jspdf.jsPDF) {
+          showToast('Error cargando generador PDF');
+          return;
+        }
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+        const fmt = document.getElementById('pdf-format-select').value;
+        const sampleId = Number(document.getElementById('pdf-sample-user').value) || 1;
+        const users = singleOnly ? STATE.participants.filter(p => p.id === sampleId) : STATE.participants;
+
+        const offCanvas = document.createElement('canvas');
+        offCanvas.width = 600;
+        offCanvas.height = 400;
+
+        const cardW = 92;
+        const cardH = 62;
+        const positions = [
+          { x: 10, y: 15 }, { x: 108, y: 15 },
+          { x: 10, y: 85 }, { x: 108, y: 85 },
+          { x: 10, y: 155 }, { x: 108, y: 155 },
+          { x: 10, y: 225 }, { x: 108, y: 225 }
+        ];
+
+        users.forEach((u, index) => {
+          const slot = index % 8;
+          if (index > 0 && slot === 0) doc.addPage();
+          renderCardToCanvas(offCanvas, fmt, u);
+          const imgData = offCanvas.toDataURL('image/png');
+          const pos = positions[slot];
+          doc.addImage(imgData, 'PNG', pos.x, pos.y, cardW, cardH);
+        });
+
+        doc.save(`PoloNorte_${fmt}_${singleOnly ? 'muestra' : 'lote22'}.pdf`);
+        showToast('📥 PDF generado y descargado');
+      }
+
+      // TAB 7: Netlify, Google Sheets y Backup
+      function renderTab7Sheets() {
+        document.getElementById('current-live-url-box').textContent = getLiveBaseUrl();
+        document.getElementById('cfg-webapp-url').value = STATE.webAppUrl || '';
+      }
+
+      // ==================== UTILIDADES Y EVENTOS ====================
+      function escapeHtml(str) {
+        return String(str || '')
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function readFileAsDataUrl(file, cb) {
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = e => cb(e.target.result);
+        reader.readAsDataURL(file);
+      }
+
+      function initEvents() {
+        document.getElementById('elfa-portrait-btn').addEventListener('dblclick', () => {
+          elfPinBuffer = '';
+          document.getElementById('elf-pin-display').textContent = '••••••';
+          document.getElementById('elf-pin-panel').classList.remove('hidden');
+          document.getElementById('user-pin-panel').classList.add('hidden');
+          showToast('🧝‍♀️ Portal secreto de Elfos desbloqueado');
+        });
+
+        document.getElementById('btn-close-elf-login').addEventListener('click', refreshAuthVisibility);
+
+        document.getElementById('user-keypad').addEventListener('click', e => {
+          const btn = e.target.closest('[data-key]');
+          if (!btn) return;
+          const k = btn.getAttribute('data-key');
+          if (k === 'DEL') {
+            userPinBuffer = userPinBuffer.slice(0, -1);
+          } else if (k === 'OK') {
+            const found = STATE.participants.find(p => p.pin === userPinBuffer);
+            if (found) {
+              userPinBuffer = '';
+              updateUserPinDots();
+              loginAsParticipant(found, false);
+            } else {
+              showToast('❌ PIN incorrecto. Revisa tu Carta Mágica');
+              userPinBuffer = '';
+            }
+          } else if (userPinBuffer.length < 4) {
+            userPinBuffer += k;
+            if (userPinBuffer.length === 4) {
+              const found = STATE.participants.find(p => p.pin === userPinBuffer);
+              if (found) {
+                setTimeout(() => {
+                  userPinBuffer = '';
+                  updateUserPinDots();
+                  loginAsParticipant(found, false);
+                }, 140);
+              }
+            }
+          }
+          updateUserPinDots();
+        });
+
+        function updateUserPinDots() {
+          document.querySelectorAll('#user-pin-dots .pin-dot').forEach((d, idx) => {
+            d.classList.toggle('filled', idx < userPinBuffer.length);
+          });
+        }
+
+        document.getElementById('elf-keypad').addEventListener('click', e => {
+          const btn = e.target.closest('[data-ekey]');
+          if (!btn) return;
+          const k = btn.getAttribute('data-ekey');
+          if (k === 'DEL') {
+            elfPinBuffer = elfPinBuffer.slice(0, -1);
+          } else if (k === 'OK') {
+            if (elfPinBuffer === STATE.elfPins.elfa || elfPinBuffer === STATE.elfPins.elfo) {
+              elfPinBuffer = '';
+              loginAsElf();
+              showToast('🧝‍♀️ ¡Bienvenida al Panel Maestro!');
+            } else {
+              showToast('❌ Clave maestra de Elfo incorrecta');
+              elfPinBuffer = '';
+            }
+          } else if (elfPinBuffer.length < 8) {
+            elfPinBuffer += k;
+          }
+          document.getElementById('elf-pin-display').textContent = elfPinBuffer ? '•'.repeat(elfPinBuffer.length) : '••••••';
+        });
+
+        document.getElementById('btn-toggle-user-fx').addEventListener('click', () => {
+          userFxOn = !userFxOn;
+          document.getElementById('btn-toggle-user-fx').textContent = userFxOn ? '✨ Efectos: ON' : '✨ Efectos: OFF';
+          renderParticles();
+        });
+
+        document.querySelectorAll('#bottom-nav .nav-btn[data-nav]').forEach(btn => {
+          btn.addEventListener('click', () => switchUserView(btn.getAttribute('data-nav')));
+        });
+        document.getElementById('btn-user-logout').addEventListener('click', () => {
+          currentUser = null;
+          simulatingUser = null;
+          refreshAuthVisibility();
+        });
+
+        document.getElementById('btn-send-wall').addEventListener('click', () => {
+          if (!currentUser) return;
+          const txt = document.getElementById('wall-post-input').value.trim();
+          if (!txt) return;
+          const anon = document.getElementById('wall-post-anon').checked;
+          STATE.wallPosts.unshift({
+            id: 'w_' + Date.now(),
+            author: anon ? '🎭 Duende Misterioso' : `🎅 ${currentUser.apodo}`,
+            text: txt,
+            time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' }),
+            pending: STATE.comm.wallModeration
+          });
+          document.getElementById('wall-post-input').value = '';
+          saveState(true);
+          renderWallPosts();
+          showToast(STATE.comm.wallModeration ? '🛡️ Enviado a moderación de los Elfos' : '✨ Publicado en el muro');
+        });
+
+        document.getElementById('btn-send-dm').addEventListener('click', () => {
+          if (!currentUser) return;
+          const toApodo = document.getElementById('dm-recipient-select').value;
+          const txt = document.getElementById('dm-message-input').value.trim();
+          if (!txt) return;
+          const anon = document.getElementById('dm-anon-check').checked;
+          STATE.messages.unshift({
+            id: 'm_' + Date.now(),
+            fromId: currentUser.id,
+            fromApodo: currentUser.apodo,
+            toApodo: toApodo,
+            text: txt,
+            anonymous: anon,
+            status: 'pending',
+            time: new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' })
+          });
+          document.getElementById('dm-message-input').value = '';
+          saveState(true);
+          showToast('📨 Mensaje enviado al filtro mágico de los Elfos');
+        });
+
+        document.getElementById('sim-user-select').addEventListener('change', e => {
+          const uid = Number(e.target.value);
+          if (!uid) return;
+          const p = STATE.participants.find(x => x.id === uid);
+          if (p) {
+            simulatingUser = p;
+            loginAsParticipant(p, true);
+          }
+        });
+        document.getElementById('btn-exit-sim').addEventListener('click', () => {
+          document.getElementById('sim-user-select').value = '';
+          loginAsElf();
+        });
+        document.getElementById('btn-logout-admin').addEventListener('click', () => {
+          isAdmin = false;
+          refreshAuthVisibility();
+        });
+
+        document.getElementById('admin-tabs-bar').addEventListener('click', e => {
+          const btn = e.target.closest('.admin-tab-btn');
+          if (!btn) return;
+          const tabId = btn.getAttribute('data-tab');
+          document.querySelectorAll('.admin-tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          document.querySelectorAll('.admin-tab-content').forEach(c => c.classList.add('hidden'));
+          document.getElementById(tabId).classList.remove('hidden');
+          if (tabId === 'tab-users') renderTab2Participants();
+          if (tabId === 'tab-cards') drawCardPreviewCanvas();
+        });
+
+        ['cfg-wall-enabled', 'cfg-dm-enabled', 'cfg-wall-mod'].forEach(id => {
+          document.getElementById(id).addEventListener('change', () => {
+            STATE.comm.wallEnabled = document.getElementById('cfg-wall-enabled').checked;
+            STATE.comm.dmEnabled = document.getElementById('cfg-dm-enabled').checked;
+            STATE.comm.wallModeration = document.getElementById('cfg-wall-mod').checked;
+            saveState(true);
+            showToast('🎛️ Configuración de comunicación actualizada');
+          });
+        });
+
+        document.getElementById('btn-save-elf-pins').addEventListener('click', () => {
+          const p1 = document.getElementById('cfg-elfa-pin').value.trim();
+          const p2 = document.getElementById('cfg-elfo-pin').value.trim();
+          if (p1.length >= 6 && p1.length <= 8) STATE.elfPins.elfa = p1;
+          if (p2.length >= 6 && p2.length <= 8) STATE.elfPins.elfo = p2;
+          saveState(true);
+          showToast('🔐 Claves maestras guardadas');
+        });
+
+        document.getElementById('btn-dl-elf-qr').addEventListener('click', () => {
+          const c = document.getElementById('elf-master-qr-canvas');
+          const a = document.createElement('a');
+          a.href = c.toDataURL('image/png');
+          a.download = 'QR_Acceso_Elfos.png';
+          a.click();
+        });
+
+        document.getElementById('matrix-filter-status').addEventListener('change', renderParticipantsMatrix);
+        document.getElementById('btn-refresh-matrix').addEventListener('click', () => {
+          renderTab2Participants();
+          showToast('🔄 Matriz actualizada');
+        });
+        document.getElementById('btn-sync-telemetry-top').addEventListener('click', () => {
+          if (STATE.webAppUrl) pullFromCloud(false);
+          else {
+            renderTab2Participants();
+            showToast('🔄 Telemetría local actualizada');
+          }
+        });
+        document.getElementById('cfg-wa-template').addEventListener('change', e => {
+          STATE.waTemplate = e.target.value;
+          saveState(true);
+        });
+        document.getElementById('btn-run-draw').addEventListener('click', runSecretSantaDraw);
+        document.getElementById('btn-export-csv').addEventListener('click', () => {
+          const headers = ['id', 'apodo', 'nombreCompleto', 'telefono', 'pin', 'codeEnvio', 'codeRecep', 'assignedToId', 'calle', 'numero', 'portal', 'piso', 'puerta', 'cp', 'ciudad', 'provincia'];
+          const rows = [headers.join(';')].concat(STATE.participants.map(p => headers.map(h => `"${String(p[h] || '').replace(/"/g, '""')}"`).join(';')));
+          const blob = new Blob([rows.join('\n')], { type: 'text/csv;charset=utf-8;' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Participantes_PoloNorte_v16_6.csv';
+          a.click();
+        });
+        document.getElementById('inp-import-csv').addEventListener('change', e => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = ev => {
+            const lines = ev.target.result.split(/\r?\n/).filter(Boolean);
+            if (lines.length < 2) return;
+            const sep = lines[0].includes(';') ? ';' : ',';
+            const headers = lines[0].split(sep).map(h => h.replace(/^"|"$/g, '').trim());
+            for (let i = 1; i < lines.length && i <= 22; i++) {
+              const cols = lines[i].split(sep).map(c => c.replace(/^"|"$/g, '').trim());
+              const p = STATE.participants[i - 1];
+              if (!p) continue;
+              headers.forEach((h, idx) => {
+                if (h in p && h !== 'id') p[h] = h === 'assignedToId' ? Number(cols[idx]) || p[h] : cols[idx];
+              });
+            }
+            saveState(true);
+            renderTab2Participants();
+            showToast('📥 CSV importado correctamente');
+          };
+          reader.readAsText(file);
+        });
+
+        document.getElementById('btn-add-block').addEventListener('click', () => {
+          STATE.blocks.push({
+            id: 'block_' + Date.now(),
+            protected: false,
+            isGold: false,
+            title: '✨ Nueva Misión Navideña',
+            subtitle: '',
+            body: 'Describe aquí la misión o pista para los duendes...',
+            state: 'active',
+            soonMessage: 'Próximamente...',
+            qrType: 'none',
+            secretKeyword: '',
+            videoBefore: '',
+            videoAfter: '',
+            imageUrl: '',
+            countdownEnabled: false,
+            countdownTarget: '',
+            countdownAutoOpen: true,
+            fontFamily: '',
+            titleSize: 22,
+            bodySize: 15
+          });
+          saveState(true);
+          renderTab3Blocks();
+          showToast('➕ Nuevo bloque añadido');
+        });
+
+        document.getElementById('inp-pre-avatar-file').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => { STATE.preDelivery.avatarUrl = url; applyVisualTheme(); saveState(true); showToast('🖼️ Retrato actualizado'); });
+        });
+        document.getElementById('inp-pre-top-file').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => { STATE.preDelivery.topGifUrl = url; applyVisualTheme(); saveState(true); });
+        });
+        document.getElementById('inp-pre-bot-file').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => { STATE.preDelivery.bottomGifUrl = url; applyVisualTheme(); saveState(true); });
+        });
+        document.getElementById('btn-save-pre').addEventListener('click', () => {
+          const pre = STATE.preDelivery;
+          pre.active = document.getElementById('cfg-pre-active').checked;
+          pre.targetDate = document.getElementById('cfg-pre-target').value;
+          pre.fontFamily = document.getElementById('cfg-pre-font').value;
+          pre.title = document.getElementById('cfg-pre-title').value;
+          pre.subtitle = document.getElementById('cfg-pre-subtitle').value;
+          pre.clue = document.getElementById('cfg-pre-clue').value;
+          pre.titleSize = Number(document.getElementById('cfg-pre-title-size').value) || 34;
+          pre.bgColor = document.getElementById('cfg-pre-bg').value;
+          pre.boxBgColor = document.getElementById('cfg-pre-box-bg').value;
+          const avUrl = document.getElementById('cfg-pre-avatar-url').value.trim();
+          if (avUrl) pre.avatarUrl = avUrl;
+          const topUrl = document.getElementById('cfg-pre-top-gif').value.trim();
+          if (topUrl) pre.topGifUrl = topUrl;
+          const botUrl = document.getElementById('cfg-pre-bot-gif').value.trim();
+          if (botUrl) pre.bottomGifUrl = botUrl;
+          applyVisualTheme();
+          saveState(true);
+          showToast('💾 Portada Pre-Entrega guardada');
+        });
+
+        document.getElementById('inp-hdr-media-file').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => {
+            STATE.header.mediaUrl = url;
+            if (STATE.header.mediaMode === 'none') STATE.header.mediaMode = 'banner';
+            document.getElementById('cfg-hdr-media-mode').value = STATE.header.mediaMode;
+            applyVisualTheme();
+            saveState(true);
+            showToast('🖼️ Imagen/GIF de cabecera cargado');
+          });
+        });
+        document.querySelectorAll('.fx-preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            document.getElementById('cfg-fx-chars').value = btn.getAttribute('data-fx');
+            STATE.particles.customImg = '';
+          });
+        });
+        document.getElementById('inp-fx-custom-img').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => { STATE.particles.customImg = url; renderParticles(); saveState(true); });
+        });
+        document.getElementById('btn-clear-fx-img').addEventListener('click', () => {
+          STATE.particles.customImg = '';
+          renderParticles();
+          saveState(true);
+        });
+        document.querySelectorAll('.theme-preset-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const t = btn.getAttribute('data-theme');
+            if (t === 'forest') {
+              document.getElementById('cfg-col-bg').value = '#0f291e';
+              document.getElementById('cfg-col-card').value = '#163829';
+              document.getElementById('cfg-col-gold').value = '#f59e0b';
+            } else if (t === 'crimson') {
+              document.getElementById('cfg-col-bg').value = '#2b090e';
+              document.getElementById('cfg-col-card').value = '#451018';
+              document.getElementById('cfg-col-gold').value = '#fbbf24';
+            } else if (t === 'royal') {
+              document.getElementById('cfg-col-bg').value = '#1c1917';
+              document.getElementById('cfg-col-card').value = '#292524';
+              document.getElementById('cfg-col-gold').value = '#fde047';
+            }
+          });
+        });
+        document.getElementById('btn-save-design').addEventListener('click', () => {
+          const hdr = STATE.header;
+          hdr.title = document.getElementById('cfg-hdr-title').value;
+          hdr.subtitle = document.getElementById('cfg-hdr-sub').value;
+          hdr.fontFamily = document.getElementById('cfg-hdr-font').value;
+          hdr.titleSize = Number(document.getElementById('cfg-hdr-title-size').value) || 30;
+          hdr.subSize = Number(document.getElementById('cfg-hdr-sub-size').value) || 14;
+          hdr.bg1 = document.getElementById('cfg-hdr-bg1').value;
+          hdr.bg2 = document.getElementById('cfg-hdr-bg2').value;
+          hdr.borderColor = document.getElementById('cfg-hdr-border').value;
+          hdr.titleColor = document.getElementById('cfg-hdr-tcolor').value;
+          const mUrl = document.getElementById('cfg-hdr-media-url').value.trim();
+          if (mUrl) hdr.mediaUrl = mUrl;
+          hdr.mediaMode = document.getElementById('cfg-hdr-media-mode').value;
+
+          STATE.particles.enabled = document.getElementById('cfg-fx-enabled').checked;
+          STATE.particles.chars = document.getElementById('cfg-fx-chars').value;
+          STATE.particles.count = Number(document.getElementById('cfg-fx-count').value) || 20;
+          STATE.particles.speed = Number(document.getElementById('cfg-fx-speed').value) || 8;
+
+          STATE.theme.bgMain = document.getElementById('cfg-col-bg').value;
+          STATE.theme.bgCard = document.getElementById('cfg-col-card').value;
+          STATE.theme.gold = document.getElementById('cfg-col-gold').value;
+          STATE.theme.textMain = document.getElementById('cfg-col-text').value;
+          STATE.theme.fontTitle = document.getElementById('cfg-font-title').value;
+          STATE.theme.sizeTitle = Number(document.getElementById('cfg-size-title').value) || 22;
+          STATE.theme.sizeBody = Number(document.getElementById('cfg-size-body').value) || 15;
+
+          applyVisualTheme();
+          saveState(true);
+          showToast('🎨 Diseño, cabecera y partículas guardados');
+        });
+
+        document.getElementById('btn-save-sender').addEventListener('click', () => {
+          const s = STATE.fixedSender;
+          s.calle = document.getElementById('sender-calle').value;
+          s.numero = document.getElementById('sender-numero').value;
+          s.portal = document.getElementById('sender-portal').value;
+          s.piso = document.getElementById('sender-piso').value;
+          s.puerta = document.getElementById('sender-puerta').value;
+          s.cp = document.getElementById('sender-cp').value;
+          s.ciudad = document.getElementById('sender-ciudad').value;
+          s.provincia = document.getElementById('sender-provincia').value;
+          saveState(true);
+          drawCardPreviewCanvas();
+          showToast('📮 Dirección fija de CRIS LA ELFA guardada');
+        });
+
+        document.getElementById('pdf-format-select').addEventListener('change', () => {
+          loadCardStyleInputs();
+          drawCardPreviewCanvas();
+        });
+        document.getElementById('pdf-sample-user').addEventListener('change', drawCardPreviewCanvas);
+
+        ['card-style-bg', 'card-style-border', 'card-style-text', 'card-style-title', 'card-style-sub', 'card-style-footer'].forEach(id => {
+          document.getElementById(id).addEventListener('input', () => {
+            const fmt = document.getElementById('pdf-format-select').value;
+            const st = STATE.cardStyles[fmt];
+            st.bg = document.getElementById('card-style-bg').value;
+            st.border = document.getElementById('card-style-border').value;
+            st.text = document.getElementById('card-style-text').value;
+            st.title = document.getElementById('card-style-title').value;
+            st.sub = document.getElementById('card-style-sub').value;
+            st.footer = document.getElementById('card-style-footer').value;
+            saveState();
+            drawCardPreviewCanvas();
+          });
+        });
+
+        document.getElementById('inp-card-bg-png').addEventListener('change', e => {
+          readFileAsDataUrl(e.target.files[0], url => {
+            const fmt = document.getElementById('pdf-format-select').value;
+            STATE.cardStyles[fmt].customPng = url;
+            saveState();
+            drawCardPreviewCanvas();
+            showToast('🖼️ Plantilla PNG aplicada a este formato');
+          });
+        });
+        document.getElementById('btn-clear-card-png').addEventListener('click', () => {
+          const fmt = document.getElementById('pdf-format-select').value;
+          STATE.cardStyles[fmt].customPng = '';
+          saveState();
+          drawCardPreviewCanvas();
+        });
+
+        document.getElementById('btn-dl-single-pdf').addEventListener('click', () => generateCardsPdf(true));
+        document.getElementById('btn-dl-batch-pdf').addEventListener('click', () => generateCardsPdf(false));
+
+        document.getElementById('btn-sync-now').addEventListener('click', () => {
+          STATE.webAppUrl = document.getElementById('cfg-webapp-url').value.trim();
+          saveState(true);
+          showToast('☁️ Estado enviado a Google Apps Script');
+        });
+        document.getElementById('btn-pull-now').addEventListener('click', () => {
+          STATE.webAppUrl = document.getElementById('cfg-webapp-url').value.trim();
+          pullFromCloud(false);
+        });
+        document.getElementById('btn-copy-gas-code').addEventListener('click', () => {
+          const gasSnippet = `function doGet(e) {
+  var raw = PropertiesService.getScriptProperties().getProperty('POLO_NORTE_V16_6') || '{}';
+  if (e && e.parameter && e.parameter.action === 'getState') {
+    return ContentService.createTextOutput(raw).setMimeType(ContentService.MimeType.JSON);
+  }
+  return HtmlService.createHtmlOutputFromFile('index').setTitle('La Elfa Cris - Polo Norte 2026').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+function doPost(e) {
+  var lock = LockService.getScriptLock();
+  lock.waitLock(5000);
+  try {
+    var payload = JSON.parse(e.postData.contents);
+    var props = PropertiesService.getScriptProperties();
+    var current = JSON.parse(props.getProperty('POLO_NORTE_V16_6') || '{}');
+    if (payload.action === 'syncAll' && payload.state) {
+      props.setProperty('POLO_NORTE_V16_6', JSON.stringify(payload.state));
+    } else if (payload.action === 'telemetry' && current.participants) {
+      for (var i = 0; i < current.participants.length; i++) {
+        if (current.participants[i].id === payload.id) {
+          current.participants[i].logins = payload.logins;
+          current.participants[i].lastSeen = payload.lastSeen;
+          current.participants[i].cards = payload.cards;
+          break;
+        }
+      }
+      props.setProperty('POLO_NORTE_V16_6', JSON.stringify(current));
+    }
+    return ContentService.createTextOutput(JSON.stringify({ ok: true })).setMimeType(ContentService.MimeType.JSON);
+  } finally {
+    lock.releaseLock();
+  }
+}`;
+          const ta = document.createElement('textarea');
+          ta.value = gasSnippet;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          showToast('📋 Código Code.gs (CORS-ready) copiado al portapapeles');
+        });
+        document.getElementById('btn-export-json').addEventListener('click', () => {
+          const blob = new Blob([JSON.stringify(STATE, null, 2)], { type: 'application/json' });
+          const a = document.createElement('a');
+          a.href = URL.createObjectURL(blob);
+          a.download = 'Backup_PoloNorte_v16_6.json';
+          a.click();
+        });
+        document.getElementById('inp-import-json').addEventListener('change', e => {
+          const f = e.target.files[0];
+          if (!f) return;
+          const r = new FileReader();
+          r.onload = ev => {
+            try {
+              STATE = deepMerge(JSON.parse(JSON.stringify(DEFAULT_STATE)), JSON.parse(ev.target.result));
+              saveState(true);
+              applyVisualTheme();
+              renderAllAdminTabs();
+              showToast('📤 Backup JSON restaurado con éxito');
+            } catch (err) {
+              showToast('❌ Archivo JSON no válido');
+            }
+          };
+          r.readAsText(f);
+        });
+        document.getElementById('btn-reset-defaults').addEventListener('click', () => {
+          localStorage.removeItem(STORAGE_KEY);
+          STATE = JSON.parse(JSON.stringify(DEFAULT_STATE));
+          saveState();
+          applyVisualTheme();
+          renderAllAdminTabs();
+          showToast('🔄 Valores de fábrica restaurados');
+        });
+
+        document.getElementById('btn-close-qr-modal').addEventListener('click', closeQrScanner);
+      }
+
+      function initApp() {
+        applyVisualTheme();
+        initEvents();
+        refreshAuthVisibility();
+        updateAllCountdowns();
+        setInterval(updateAllCountdowns, 1000);
+        if (STATE.webAppUrl) pullFromCloud(true);
+      }
+
+      document.addEventListener('DOMContentLoaded', initApp);
+    })();
+  </script>
+</body>
+</html>
